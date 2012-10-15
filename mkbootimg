@@ -1,0 +1,90 @@
+#!/bin/bash
+#
+# Copyright (c) 2010 Wind River Systems, Inc.
+#
+# The right to copy, distribute, modify, or otherwise make use
+# of this software may be licensed only pursuant to the terms
+# of an applicable Wind River license agreement.
+
+KERNEL=
+RAMDISK=
+SECOND=
+CMDLINE=
+BOARD=
+BASE=0x80008000
+OUTPUT=
+NAME="linux-2.6.29"
+MKIMAGE=`dirname $0`/mkimage
+
+while [ $# -gt 0 ]; do
+    case $1 in
+        --kernel)
+            KERNEL=$2
+            shift
+            ;;
+
+        --ramdisk)
+            RAMDISK=$2
+            shift
+            ;;
+
+        --second)
+            SECOND=$2
+            shift
+            ;;
+
+        --cmdline)
+	    # not support
+            CMDLINE=$2
+            shift
+            ;;
+
+        --board)
+            BOARD=$2
+            shift
+            ;;
+
+        --base)
+            BASE=$2
+            shift
+            ;;
+
+        -o|--output)
+            OUTPUT=$2
+            shift
+            ;;
+
+        -h|--help)
+	    echo "usage: mkbootimg"
+	    echo "--kernel <filename>"
+	    echo "--ramdisk <filename>"
+	    echo "[ --second <2ndbootloader-filename> ]"
+	    echo "[ --cmdline <kernel-commandline> ]"
+	    echo "[ --board <boardname> ]"
+	    echo "[ --base <address> ]"
+	    echo "-o|--output <filename>"
+            exit 0
+            ;;
+
+        *)
+            echo "Unknown option $1."
+            exit 1
+            ;;
+    esac
+    shift
+done
+
+if [ -z "$KERNEL" -o -z "$RAMDISK" -o -z "$OUTPUT" ]; then
+    echo "Missing required arguments."
+    exit 1
+fi
+
+if [ ! -x "$MKIMAGE" ]; then
+    echo "mkimage executable not found"
+    exit 1
+fi
+
+DATAFILES="$KERNEL:$RAMDISK"
+[ -n "$SECOND" ] && DATAFILES="$DATAFILES:$SECOND"
+
+$MKIMAGE -A arm -O linux -T multi -C none -a $BASE -e $BASE -n $NAME -d "$DATAFILES" "$OUTPUT" > /dev/null
