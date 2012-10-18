@@ -36,3 +36,6 @@ u-boot
 u-boot.bin
 u-boot.map
 u-boot.srec
+
+# kdiff3 backup
+*.orig

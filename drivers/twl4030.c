@@ -1270,6 +1270,8 @@ void bootcase_check(void)
     twl4030_improve_backup_battery();
     twl4030_i2c_read_u8(TWL4030_CHIP_PM_MASTER, &sysboot, PM_MASTER_STS_BOOT);
 
+    printf("sysboot is 0x%02x \n", sysboot);
+
     while(boot_case_table[i].check){
         if((boot_case_table[i].check)(sysboot)){
             bootcase_name = boot_case_table[i].name;

@@ -55,6 +55,41 @@ void sr32(u32 addr, u32 start_bit, u32 num_bits, u32 value)
 	__raw_writel(tmp, addr);
 }
 
+/** get gpio bank base **/
+static gpio_t* get_gpio_base(int bank)
+{
+	gpio_t* gpio_base;
+
+	if (bank<0||bank>5)
+		return 0;
+
+    switch(bank)
+    {
+        case 0:
+            gpio_base = (gpio_t *)OMAP34XX_GPIO1_BASE;
+            break;
+        case 1:
+            gpio_base = (gpio_t *)OMAP34XX_GPIO2_BASE;
+            break;
+        case 2:
+            gpio_base = (gpio_t *)OMAP34XX_GPIO3_BASE;
+            break;
+        case 3:
+            gpio_base = (gpio_t *)OMAP34XX_GPIO4_BASE;
+            break;
+        case 4:
+            gpio_base = (gpio_t *)OMAP34XX_GPIO5_BASE;
+            break;
+        case 5:
+            gpio_base = (gpio_t *)OMAP34XX_GPIO6_BASE;
+            break;
+    }
+
+	return gpio_base;			
+}
+
+/** UGlee **/
+/** original code **/
 void set_gpio_dataout(int gpio, int value)
 {
     int bank=0,offset=0;
@@ -66,40 +101,84 @@ void set_gpio_dataout(int gpio, int value)
 
     bank= gpio/32;
     offset = gpio%32;
-    switch(bank)
-    {
-        case 0:
-            gpio_base = (gpio_t *)OMAP34XX_GPIO1_BASE;
-            break;
-       case 1:
-            gpio_base = (gpio_t *)OMAP34XX_GPIO2_BASE;
-            break;
-       case 2:
-            gpio_base = (gpio_t *)OMAP34XX_GPIO3_BASE;
-            break;
-       case 3:
-            gpio_base = (gpio_t *)OMAP34XX_GPIO4_BASE;
-            break;
-        case 4:
-            gpio_base = (gpio_t *)OMAP34XX_GPIO5_BASE;
-            break;
-        case 5:
-            gpio_base = (gpio_t *)OMAP34XX_GPIO6_BASE;
-            break;
+	gpio_base = get_gpio_base(bank);
 
-    }
-    /*set output enable*/
+    /** see TRM p3615, clear bit to enable output **/
     tmp=__raw_readl((u32)&gpio_base->oe)&~(1<<offset);
     __raw_writel(tmp,(u32)&gpio_base->oe);
-    /*set or clear*/
+
+    /** set or clear, manipulate only 1 bit **/
     tmp = 1<<offset;
     if(value)
         __raw_writel(tmp,(u32)&gpio_base->setdataout);
     else
         __raw_writel(tmp,(u32)&gpio_base->cleardataout);
+}
 
+/** UGlee **/
+/** set gpio to input mode **/
+void set_gpio_to_input(int gpio)
+{
+	int bank=0,offset=0;
+	u32 base,tmp=0;
+	gpio_t *gpio_base;
 
+	if(gpio>=192||gpio<0)
+		return;
+	
+	bank = gpio/32;
+	offset=gpio%32;
+	gpio_base = get_gpio_base(bank);
 
+	/** see TRM p3615, set bit to enable input **/
+	
+	// printf("try to set gpio %d to input\n", gpio);
+	tmp=__raw_readl((u32)&gpio_base->oe);
+	// printf("oe read: %04x\n", tmp);
+	tmp |= (1<<offset);
+	// printf("oe bit set: %04x\n", tmp);
+	__raw_writel(tmp,(u32)&gpio_base->oe);
+	// tmp=__raw_readl((u32)&gpio_base->oe);
+	// printf("oe read back: %04x\n", tmp);
+}
+
+/****************************************************
+
+	read gpio input
+	be sure to check return value
+
+	return 1, input is high
+	return 0, input is low
+	return -1, invalid gpio parameter
+	return -2, gpio is not in input mode
+
+*****************************************************/
+int read_gpio_input(int gpio)
+{
+	int bank=0,offset=0;
+	u32 tmp=0;
+	gpio_t* gpio_base;
+
+	if (gpio>=192||gpio<0)
+		return -1;
+
+	bank = gpio/32;
+	offset = gpio%32;
+	gpio_base = get_gpio_base(bank);
+
+	/** check if the gpio is in input mode **/
+	tmp=__raw_readl((u32)&gpio_base->oe);
+
+	/** test code for output **/
+	// printf("read_gpio_input, gpio: %d, bank: %d, offset: %d, oe: 0x%04x\n", gpio, bank, offset, tmp);
+	if ((tmp & (1<<offset)) == 0) /* oe bit not set */
+	{
+		return -2;
+	}
+	
+	/** read standard datain register **/
+	tmp=__raw_readl((u32)&gpio_base->datain);
+	return (tmp & (1<<offset)) ? 1 : 0;
 }
 
 

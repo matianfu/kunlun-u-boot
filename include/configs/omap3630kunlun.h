@@ -116,7 +116,12 @@
 /* Uncommend to run PER at 2x 96MHz */
 
 #undef CONFIG_USE_IRQ                 /* no support for IRQs */
+
+/* Kunlun enable this macro by default, see misc_init_r() implementation in omap3630kunlun.c */
+/* UGlee undefine this macro disable misc_init_r() in board.c  */
+#ifndef CONFIG_MISC_INIT_R	
 #define CONFIG_MISC_INIT_R
+#endif
 
 #define CONFIG_CMDLINE_TAG       1    /* enable passing of ATAGs */
 #define CONFIG_SETUP_MEMORY_TAGS 1
@@ -148,7 +153,7 @@
 
 /* allow to overwrite serial and ethaddr */
 #define CONFIG_ENV_OVERWRITE
-#define CONFIG_CONS_INDEX        3
+#define CONFIG_CONS_INDEX        3 /** UGlee: 3 restored, can be changed to 1 **/
 #define CONFIG_BAUDRATE          115200
 #define CFG_BAUDRATE_TABLE       {4800, 9600, 19200, 38400, 57600, 115200}
 
