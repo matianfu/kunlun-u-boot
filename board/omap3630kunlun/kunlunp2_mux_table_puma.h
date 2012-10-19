@@ -71,49 +71,47 @@
 	MUX_VAL(CP(GPMC_nCS4),      (IEN  | PTD | DIS | M7)) /* floating */\
 	MUX_VAL(CP(GPMC_nCS5),      (IEN  | PTD | DIS | M7)) /* floating */\
 	MUX_VAL(CP(GPMC_nCS6),      (IEN  | PTD | DIS | M7)) /* floating */\
-	MUX_VAL(CP(GPMC_nCS7),      (IEN  | PTD | EN  | M4)) /* BL_PWM_AP, i/o, pd, should be mux as gpt_8_pwm_evt m3, mux as M4 for test purpose */\
-	MUX_VAL(CP(GPMC_CLK),       (IDIS | PTD | DIS | M0)) /*GPMC_CLK*/\
-	MUX_VAL(CP(GPMC_nADV_ALE),  (IDIS | PTD | DIS | M0)) /*GPMC_nADV_ALE*/\
-	MUX_VAL(CP(GPMC_nOE),       (IDIS | PTD | DIS | M0)) /*GPMC_nOE*/\
-	MUX_VAL(CP(GPMC_nWE),       (IDIS | PTD | DIS | M0)) /*GPMC_nWE*/\
-	MUX_VAL(CP(GPMC_nBE0_CLE),  (IDIS | PTD | DIS | M0)) /*GPMC_nBE0_CLE*/\
-	MUX_VAL(CP(GPMC_nBE1),      (IEN  | PTD | DIS | M0)) /*GPMC_nBE1 lab*/\
-	MUX_VAL(CP(GPMC_nWP),       (IEN  | PTD | DIS | M0)) /*GPMC_nWP*/\
-	MUX_VAL(CP(GPMC_WAIT0),     (IEN  | PTU | EN  | M0)) /*GPMC_WAIT0*/\
-	MUX_VAL(CP(GPMC_WAIT1),     (IEN  | PTU | EN  | M0)) /*GPMC_WAIT1*/\
-	MUX_VAL(CP(GPMC_WAIT2),     (IEN  | PTD | DIS | M7)) /* m2 as uart4_tx, m4 as gpio_64*/\
-	MUX_VAL(CP(GPMC_WAIT3),     (IEN  | PTD | DIS | M7)) /* m2 as uart4_rx, m4 as gpio_65*/\
+	MUX_VAL(CP(GPMC_nCS7),      (IEN  | PTD | EN  | M4)) /* BL_PWM_AP, i/o, pd */\
+	MUX_VAL(CP(GPMC_CLK),       (IEN  | PTD | DIS | M7)) /* floating */\
+	MUX_VAL(CP(GPMC_nADV_ALE),  (IEN  | PTD | DIS | M7)) /* floating */\
+	MUX_VAL(CP(GPMC_nOE),       (IEN  | PTD | DIS | M7)) /* floating */\
+	MUX_VAL(CP(GPMC_nWE),       (IEN  | PTD | DIS | M7)) /* floating */\
+	MUX_VAL(CP(GPMC_nBE0_CLE),  (IEN  | PTD | DIS | M7)) /* floating */\
+	MUX_VAL(CP(GPMC_nBE1),      (IEN  | PTD | DIS | M7)) /* floating */\
+	MUX_VAL(CP(GPMC_nWP),       (IEN  | PTD | DIS | M7)) /* floating */\
+	MUX_VAL(CP(GPMC_WAIT0),     (IEN  | PTU | EN  | M0)) /* GPMC_WAIT0 */\
+	MUX_VAL(CP(GPMC_WAIT1),     (IEN  | PTU | EN  | M0)) /* GPMC_WAIT1 */\
+	MUX_VAL(CP(GPMC_WAIT2),     (IEN  | PTU | DIS | M7)) /* m2 as uart4_tx, m4 as gpio_64 */\
+	MUX_VAL(CP(GPMC_WAIT3),     (IEN  | PTU | DIS | M7)) /* m2 as uart4_rx, m4 as gpio_65 */\
 	/*DSS*/\
 	MUX_VAL(CP(DSS_PCLK),       (IDIS | PTD | DIS | M0)) /*DSS_PCLK*/\
 	MUX_VAL(CP(DSS_HSYNC),      (IDIS | PTD | DIS | M0)) /*DSS_HSYNC*/\
 	MUX_VAL(CP(DSS_VSYNC),      (IDIS | PTD | DIS | M0)) /*DSS_VSYNC*/\
-	/** UGlee wordaround solution for mistake in puma sch **/\
-	MUX_VAL(CP(DSS_ACBIAS),     (IEN  | PTD | DIS | M4)) /*DSS_ACBIAS, GPIO_69 */\
-	/** end **/\
-	MUX_VAL(CP(DSS_DATA0),      (IEN  | PTD | DIS | M0)) /*DSS_DATA0*/\
-	MUX_VAL(CP(DSS_DATA1),      (IEN  | PTD | DIS | M0)) /*DSS_DATA1*/\
-	MUX_VAL(CP(DSS_DATA2),      (IEN  | PTD | DIS | M0)) /*DSS_DATA2*/\
-	MUX_VAL(CP(DSS_DATA3),      (IEN  | PTD | DIS | M0)) /*DSS_DATA3*/\
-	MUX_VAL(CP(DSS_DATA4),      (IEN  | PTD | DIS | M0)) /*DSS_DATA4*/\
-	MUX_VAL(CP(DSS_DATA5),      (IEN  | PTD | DIS | M0)) /*DSS_DATA5*/\
-	MUX_VAL(CP(DSS_DATA6),      (IEN  | PTD | DIS | M0)) /*DSS_DATA6*/\
-	MUX_VAL(CP(DSS_DATA7),      (IEN  | PTD | DIS | M0)) /*DSS_DATA7*/\
-	MUX_VAL(CP(DSS_DATA8),      (IEN  | PTD | DIS | M0)) /*DSS_DATA8*/\
-	MUX_VAL(CP(DSS_DATA9),      (IEN  | PTD | DIS | M0)) /*DSS_DATA9*/\
-	MUX_VAL(CP(DSS_DATA10),     (IEN  | PTD | DIS | M0)) /*DSS_DATA10*/\
-	MUX_VAL(CP(DSS_DATA11),     (IEN  | PTD | DIS | M0)) /*DSS_DATA11*/\
-	MUX_VAL(CP(DSS_DATA12),     (IEN  | PTD | DIS | M0)) /*DSS_DATA12*/\
-	MUX_VAL(CP(DSS_DATA13),     (IEN  | PTD | DIS | M0)) /*DSS_DATA13*/\
-	MUX_VAL(CP(DSS_DATA14),     (IEN  | PTD | DIS | M0)) /*DSS_DATA14*/\
-	MUX_VAL(CP(DSS_DATA15),     (IEN  | PTD | DIS | M0)) /*DSS_DATA15*/\
-	MUX_VAL(CP(DSS_DATA16),     (IEN  | PTD | DIS | M0)) /*DSS_DATA16*/\
-	MUX_VAL(CP(DSS_DATA17),     (IEN  | PTD | DIS | M0)) /*DSS_DATA17*/\
-	MUX_VAL(CP(DSS_DATA18),     (IEN  | PTD | DIS | M0)) /*DSS_DATA18*/\
-	MUX_VAL(CP(DSS_DATA19),     (IEN  | PTD | DIS | M0)) /*DSS_DATA19*/\
-	MUX_VAL(CP(DSS_DATA20),     (IEN  | PTD | DIS | M0)) /*DSS_DATA20*/\
-	MUX_VAL(CP(DSS_DATA21),     (IEN  | PTD | DIS | M0)) /*DSS_DATA21*/\
-	MUX_VAL(CP(DSS_DATA22),     (IEN  | PTD | DIS | M0)) /*DSS_DATA22*/\
-	MUX_VAL(CP(DSS_DATA23),     (IEN  | PTD | DIS | M0)) /*DSS_DATA23*/\
+	MUX_VAL(CP(DSS_ACBIAS),     (IDIS | PTD | DIS | M0)) /*DSS_ACBIAS*/\
+	MUX_VAL(CP(DSS_DATA0),      (IDIS | PTD | DIS | M0)) /*DSS_DATA0*/\
+	MUX_VAL(CP(DSS_DATA1),      (IDIS | PTD | DIS | M0)) /*DSS_DATA1*/\
+	MUX_VAL(CP(DSS_DATA2),      (IDIS | PTD | DIS | M0)) /*DSS_DATA2*/\
+	MUX_VAL(CP(DSS_DATA3),      (IDIS | PTD | DIS | M0)) /*DSS_DATA3*/\
+	MUX_VAL(CP(DSS_DATA4),      (IDIS | PTD | DIS | M0)) /*DSS_DATA4*/\
+	MUX_VAL(CP(DSS_DATA5),      (IDIS | PTD | DIS | M0)) /*DSS_DATA5*/\
+	MUX_VAL(CP(DSS_DATA6),      (IDIS | PTD | DIS | M0)) /*DSS_DATA6*/\
+	MUX_VAL(CP(DSS_DATA7),      (IDIS | PTD | DIS | M0)) /*DSS_DATA7*/\
+	MUX_VAL(CP(DSS_DATA8),      (IDIS | PTD | DIS | M0)) /*DSS_DATA8*/\
+	MUX_VAL(CP(DSS_DATA9),      (IDIS | PTD | DIS | M0)) /*DSS_DATA9*/\
+	MUX_VAL(CP(DSS_DATA10),     (IDIS | PTD | DIS | M0)) /*DSS_DATA10*/\
+	MUX_VAL(CP(DSS_DATA11),     (IDIS | PTD | DIS | M0)) /*DSS_DATA11*/\
+	MUX_VAL(CP(DSS_DATA12),     (IDIS | PTD | DIS | M0)) /*DSS_DATA12*/\
+	MUX_VAL(CP(DSS_DATA13),     (IDIS | PTD | DIS | M0)) /*DSS_DATA13*/\
+	MUX_VAL(CP(DSS_DATA14),     (IDIS | PTD | DIS | M0)) /*DSS_DATA14*/\
+	MUX_VAL(CP(DSS_DATA15),     (IDIS | PTD | DIS | M0)) /*DSS_DATA15*/\
+	MUX_VAL(CP(DSS_DATA16),     (IDIS | PTD | DIS | M0)) /*DSS_DATA16*/\
+	MUX_VAL(CP(DSS_DATA17),     (IDIS | PTD | DIS | M0)) /*DSS_DATA17*/\
+	MUX_VAL(CP(DSS_DATA18),     (IDIS | PTD | DIS | M0)) /*DSS_DATA18*/\
+	MUX_VAL(CP(DSS_DATA19),     (IDIS | PTD | DIS | M0)) /*DSS_DATA19*/\
+	MUX_VAL(CP(DSS_DATA20),     (IDIS | PTD | DIS | M0)) /*DSS_DATA20*/\
+	MUX_VAL(CP(DSS_DATA21),     (IDIS | PTD | DIS | M0)) /*DSS_DATA21*/\
+	MUX_VAL(CP(DSS_DATA22),     (IDIS | PTD | DIS | M0)) /*DSS_DATA22*/\
+	MUX_VAL(CP(DSS_DATA23),     (IDIS | PTD | DIS | M0)) /*DSS_DATA23*/\
 	/* UGlee, disabled; CAMERA*/\
 	MUX_VAL(CP(CAM_HS ),        (IEN  | PTD | DIS | M7)) /* (IEN  | PTD | DIS | M0)) */ /*CAM_HS */\
 	MUX_VAL(CP(CAM_VS ),        (IEN  | PTD | DIS | M7)) /* (IEN  | PTD | DIS | M0)) */ /*CAM_VS */\
@@ -180,7 +178,7 @@
 	/*UGlee, uart1 to cam port *; uart1 Modem */\
 	MUX_VAL(CP(UART1_TX),       (IDIS | PTD | DIS | M0)) /* UART1_TX*/\
 	MUX_VAL(CP(UART1_RTS),      (IEN  | PTD | EN  | M4)) /* MDM_RST, GPIO_149, drive high to reset modem */\
-	/* This is muxed in x-loader MUX_VAL(CP(UART1_CTS),      (IEN  | PTD | EN  | M4)) UART1_EN, GPIO_150, */\
+	MUX_VAL(CP(UART1_CTS),      (IEN  | PTD | EN  | M4)) /* UART1_EN, GPIO_150, initially input */\
 	MUX_VAL(CP(UART1_RX),       (IEN  | PTD | DIS | M0)) /* UART1_RX*/\
 	/*UGlee, to aud port, gpio setting */\
 	MUX_VAL(CP(McBSP4_CLKX),    (IDIS | PTU | EN  | M4)) /* OVP_REV_N GPIO_152*/\
@@ -224,10 +222,10 @@
 	MUX_VAL(CP(I2C4_SDA),       (IEN  | PTU | EN  | M0)) /*I2C4_SDA, TWL5030*/\
 	MUX_VAL(CP(HDQ_SIO),        (IEN  | PTU | EN  | M4)) /* TEST?? *//*MANU_MODE GPIO_170*/\
 	/*spi1*/\
-	MUX_VAL(CP(McSPI1_CLK),     (IEN  | PTU | EN  | M4)) /* LCD_SCL_1V8, GPIO_171, PU */ \
-	MUX_VAL(CP(McSPI1_SIMO),    (IEN  | PTU | DIS | M4)) /* LCD_SDA_1V8, GPIO_172, NP */ \
+	MUX_VAL(CP(McSPI1_CLK),     (IDIS | PTU | EN  | M4)) /* LCD_SCL_1V8 */ \
+	MUX_VAL(CP(McSPI1_SIMO),    (IEN  | PTU | EN  | M4)) /* LCD_SDA_1V8 */ \
 	MUX_VAL(CP(McSPI1_SOMI),    (IEN  | PTD | EN  | M4)) /* WL_CLK_REQ */ \
-	MUX_VAL(CP(McSPI1_CS0),     (IEN  | PTU | EN  | M4)) /* LCD_CS_1V8, GPIO_174, PU */\
+	MUX_VAL(CP(McSPI1_CS0),     (IDIS | PTU | EN  | M4)) /* LCD_CS_1V8 */\
 	MUX_VAL(CP(McSPI1_CS1),     (IDIS | PTD | DIS | M3)) /* WLAN_MMC3_CMD or MG3732_MDM_ON or GPIO 175, BUG!! */ /* (IDIS | PTD | EN  | M3)) */ /*WLAN MMC3_CMD*/\
 	MUX_VAL(CP(McSPI1_CS2),     (IDIS | PTD | DIS | M3)) /* WLAN_MMC3_CLK or MG3732_MDM_RST or GPIO 176, BUG!! */ /* (IDIS | PTD | DIS | M3)) */ /*WLAN MMC3_CLK*/\
 	MUX_VAL(CP(McSPI1_CS3),     (IEN  | PTD | DIS | M3)) /* HSUSB2_DATA2 */ /* (IEN  | PTD | DIS | M4)) */ /*CBP DIGITAL USB, USB2_TXDAT, Input GPIO*/\

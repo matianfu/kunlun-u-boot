@@ -37,6 +37,10 @@
 #include <twl4030.h>
 
 #include "../../cpu/omap3/mmc_host_def.h"
+
+#include "gpio.h"
+#include "lg_lcd.h"
+
 #define mdelay(n)       udelay((n)*1000)
 int get_boot_type(void);
 void v7_flush_dcache_all(int, int);
@@ -509,11 +513,43 @@ void s_init(void)
 }
 
 /*******************************************************
+
+	do my test, all dirty jobs here
+
+*********************************************************/
+extern void kunlun_lcd_init(void);
+
+void do_my_test(void) {
+
+	enable_gpio_bank(1);
+	enable_gpio_bank(2);
+	enable_gpio_bank(3);
+	enable_gpio_bank(4);
+	enable_gpio_bank(5);
+	enable_gpio_bank(6);
+
+	set_gpio_dataout(69, 1);
+	udelay(5000);
+
+	lg_3wire_init( 	
+		CONTROL_PADCONF_McSPI1_CS0, 174,
+		CONTROL_PADCONF_McSPI1_CLK, 171,
+		CONTROL_PADCONF_McSPI1_SIMO, 172,
+		0, 0);
+	
+	lg_3wire_init_regs(0); // normal white
+
+	kunlun_lcd_init();
+}
+
+/*******************************************************
  * Routine: misc_init_r
  * Description: Init ethernet (done here so udelay works)
  ********************************************************/
 int misc_init_r(void)
 {
+	
+#if 0
 #ifdef CONFIG_3430ZOOM2
 	{
 		/* GPIO LEDs
@@ -631,7 +667,8 @@ int misc_init_r(void)
         puts("Exit calibration mode...\n");
     }
 #endif
-
+#endif 	/* UGlee, remove all operations here */
+	do_my_test();
 	return (0);
 }
 

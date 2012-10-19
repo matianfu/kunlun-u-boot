@@ -39,3 +39,6 @@ u-boot.srec
 
 # kdiff3 backup
 *.orig
+
+# 
+*.swp

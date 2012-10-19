@@ -1,13 +1,15 @@
 /*
  * =====================================================================================
  *
- *       Filename:  lcd.c
+ *       Filename:  omap_dss.c
  *
  *    Description:  OMAP3630 Display  subsystem
  *
  *        Version:  1.0
  *        Created:  2009
  *
+ *	   Author:  matianfu@actnova.com
+ *	  company:  ACTNOVA
  *         Author:  Daqing Li (daqli), daqli@via-telecom.com
  *        Company:  VIA TELECOM
  *
@@ -81,7 +83,6 @@ extern void backlight_off(void);
 
 extern void sr32(u32 addr, u32 start_bit, u32 num_bits, u32 value);
 
-static void gpio_enable(int bank);
 static void omap34xx_dss_clocks_on(void);
 static void omap3_disp_config_dss(void);
 static void omap3_disp_config_dispc(int is_rfbi);
@@ -157,6 +158,9 @@ static __inline__ u32 dispc_reg_merge(u32 offset, u32 val, u32 mask)
     return new_val;
 }
 
+/*
+ * DSI register Access
+ */
 static __inline__ u32 dsi_reg_in(u32 offset)
 {
     return __raw_readl(DSI_REG_BASE + DSI_REG_OFFSET + offset);
@@ -168,44 +172,21 @@ static __inline__ u32 dsi_reg_out(u32 offset, u32 val)
     return val;
 }
 
-/*enable GPIO #bank function and interface clock*/
-static void gpio_enable(int bank)
-{
-    if(bank == 1){
-        sr32(CM_ICLKEN_WKUP,3, 1, 1);
-        sr32(CM_FCLKEN_WKUP,3, 1, 1);
-    }else if(bank == 2){
-        sr32(CM_ICLKEN_PER,CLKEN_PER_EN_GPIO2_BIT, 1, 1);
-        sr32(CM_FCLKEN_PER,CLKEN_PER_EN_GPIO2_BIT, 1, 1);
-    }else if(bank == 3){
-        sr32(CM_ICLKEN_PER,CLKEN_PER_EN_GPIO3_BIT, 1, 1);
-        sr32(CM_FCLKEN_PER,CLKEN_PER_EN_GPIO3_BIT, 1, 1);
-    }else if(bank == 4){
-        sr32(CM_ICLKEN_PER,CLKEN_PER_EN_GPIO4_BIT, 1, 1);
-        sr32(CM_FCLKEN_PER,CLKEN_PER_EN_GPIO4_BIT, 1, 1);
-    }else if(bank == 5){
-        sr32(CM_ICLKEN_PER,CLKEN_PER_EN_GPIO5_BIT, 1, 1);
-        sr32(CM_FCLKEN_PER,CLKEN_PER_EN_GPIO5_BIT, 1, 1);
-    }else if(bank == 6){
-        sr32(CM_ICLKEN_PER,CLKEN_PER_EN_GPIO6_BIT, 1, 1);
-        sr32(CM_FCLKEN_PER,CLKEN_PER_EN_GPIO6_BIT, 1, 1);
-    }
-    return;
 
-}
-
-/*update registers*/
+/*
+ * set golcd bit
+ */
 static void omap3_disp_golcd(void)
 {
     u32 dispc_ctrl;
     dispc_ctrl = dispc_reg_in(DISPC_CONTROL);
-    dispc_ctrl |= 1 << 5;
+    dispc_ctrl |= 1 << 5; /** golcd bit **/
     dispc_reg_out(DISPC_CONTROL,dispc_ctrl);
  }
 
 
-
-/*configure graphics DMA*/
+/** configure graphics DMA **/
+/** base: pointer to pixel buffer **/
 static int omap3_disp_config_gfxdma(void *base)
 {
     u32 gfx_attr = dispc_reg_in(DISPC_GFX_ATTRIBUTES);

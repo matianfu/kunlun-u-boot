@@ -24,7 +24,8 @@ include $(TOPDIR)/config.mk
 
 LIB	= lib$(BOARD).a
 
-OBJS	:= \
+# UGlee, original, Sun Oct  7 11:58:53 CST 2012
+# OBJS	:= \
 	omap3630kunlun.o \
 	sys_info.o \
 	lcd.o \
@@ -33,7 +34,26 @@ OBJS	:= \
 	adc_calibration.o \
 	camera.o \
 	ispresizer.o \
-	kunlun_mouse.o
+	kunlun_mouse.o\
+	gpio.o\
+	lg_lcd.o
+
+# UGlee, twl5030_pwm1 added, 		Sun Oct  7 11:58:24 CST 2012
+# UGlee, omap_dss added, lcd.o removed	Sun Oct  7 17:46:59 CST 2012
+OBJS	:= \
+	omap3630kunlun.o \
+	omap_dss.o \
+	sys_info.o \
+	backlight.o \
+	backlight_pwm.o \
+	twl5030_pwm1.o \
+	adc_calibration.o \
+	camera.o \
+	ispresizer.o \
+	kunlun_mouse.o\
+	gpio.o\
+	lg_lcd.o
+
 
 $(LIB):	$(OBJS)
 	$(AR) crv $@ $^
