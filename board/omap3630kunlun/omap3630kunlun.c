@@ -800,7 +800,7 @@ int dram_init(void)
 #include "wudang_mux_table.h"
 #endif
 
-#if defined(CONFIG_3630KUNLUN_P2)
+#if defined(CONFIG_3630KUNLUN_P2) || defined(CONFIG_3630PUMA_V1)
 #undef MUX_DEFAULT_ES2
 #include "kunlunp2_mux_table.h"
 #endif

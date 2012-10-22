@@ -293,6 +293,9 @@ void start_armboot (void)
 #if defined(CONFIG_BOOTCASE_CHECK)
 	/*check the boot case, add "bootcase= " in commnand line */
 	bootcase_check();
+
+	printf("bootcase_check() passed.");
+	udelay(1000000);
 #endif
 
 /** TODO why not in misc_init_r() ???  **/

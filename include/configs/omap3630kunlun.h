@@ -38,7 +38,7 @@
 #define CONFIG_3630KUNLUN	1    /* working on kunlun board */
 #define CONFIG_FASTBOOT	        1    /* Using fastboot interface */
 
-#if defined(CONFIG_3630KUNLUN_KL9C) || defined(CONFIG_3630KUNLUN_P2)
+#if defined(CONFIG_3630KUNLUN_KL9C) || defined(CONFIG_3630KUNLUN_P2) || defined(CONFIG_3630PUMA_V1)
 #define CONFIG_LCD_RM68041    1
 #define CONFIG_BACKLIGHT_CAT3637  1  /*use CAT3637 backlight control chip */
 #define CONFIG_OPTICAL_MOUSE    1       //support optical mouse
@@ -98,7 +98,7 @@
 
 #define V_SCLK                   (V_OSCK >> 1)
 
-#if defined(CONFIG_3630KUNLUN_P2)   /* Define the DDR type */
+#if defined(CONFIG_3630KUNLUN_P2) || defined(CONFIG_3630PUMA_V1)  /* Define the DDR type */
 #define CONFIG_DDR_H8KDS0UN0MER_4EM
 #endif
 
@@ -434,7 +434,7 @@ extern unsigned int boot_flash_type;
 #define CFG_FASTBOOT_TRANSFER_BUFFER FAST_BOOT_BUFFER_BASEADDR
 #define CFG_FASTBOOT_TRANSFER_BUFFER_SIZE FAST_BOOT_BUFFER_SIZE
 #define CFG_FASTBOOT_PREBOOT_KEYS         2
-#if defined(CONFIG_3630KUNLUN_KL9C) || defined(CONFIG_3630KUNLUN_P2)
+#if defined(CONFIG_3630KUNLUN_KL9C) || defined(CONFIG_3630KUNLUN_P2) || defined(CONFIG_3630PUMA_V1)
 #define CFG_FASTBOOT_PREBOOT_KEY1         27 /* 'Enter' */
 #define CFG_FASTBOOT_PREBOOT_KEY2         11 /* 'Home' */
 /* Haier N710E. Combo: Volume Down + Camera. */
@@ -450,7 +450,7 @@ extern unsigned int boot_flash_type;
 #define CFG_FASTBOOT_PREBOOT_LOOP_WAIT    (0)
 
 #define CFG_HOME_KEY_PRESSED_KEYS         2
-#if defined(CONFIG_3630KUNLUN_KL9C) || defined(CONFIG_3630KUNLUN_P2)
+#if defined(CONFIG_3630KUNLUN_KL9C) || defined(CONFIG_3630KUNLUN_P2) || defined(CONFIG_3630PUMA_V1)
 #define CFG_HOME_KEY_PRESSED_KEY1         11 /* 'Home' */
 #define CFG_HOME_KEY_PRESSED_KEY2         10 /* 'Vol-down' */
 #define CFG_HOME_KEY_PRESSED_KEY3         2/* 'Vol-up' */

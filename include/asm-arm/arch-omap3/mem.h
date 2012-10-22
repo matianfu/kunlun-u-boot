@@ -87,7 +87,7 @@ typedef enum {
 #define SDP_SDRC_MDCFG_0_DDR	(0x03588099)	 /* Hynix TWO CS , each one is 256M MCP ddr module */
 #elif defined(CONFIG_K29C_MEM)  //2011.5.9 jhy Flash for N8K
 #define SDP_SDRC_MDCFG_0_DDR    (0x03588099)     /* Toshiba MCP ddr module */
-#elif defined(CONFIG_3630KUNLUN_P2)
+#elif defined(CONFIG_3630KUNLUN_P2) || defined(CONFIG_3630PUMA_V1)
 #define SDP_SDRC_MDCFG_0_DDR	(0x03588099)	 /* Hynix 256M MCP ddr module */
 #else
 #define SDP_SDRC_MDCFG_0_DDR	(0x02584099)	 /* Micron MCP ddr module */
