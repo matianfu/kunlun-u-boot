@@ -21,7 +21,7 @@
 #define DSS_REVISION            0x000
 #define DSS_SYSCONFIG           0x010
 #define DSS_SYSSTATUS           0x014
-#define DSS_CONTROL         0x040
+#define DSS_CONTROL         	0x040
 
 
 /* physical memory map definitions */
@@ -39,7 +39,7 @@
 
 // DSI
 #define DSI_REG_BASE            0x4804FC00
-#define DSI_REG_OFFSET		    0x00000000
+#define DSI_REG_OFFSET		0x00000000
 #define DSI_CTRL                0x0040
 
 
@@ -52,8 +52,8 @@
 #define DISPC_CONTROL           0x040
 #define DISPC_CONFIG            0x044
 #define DISPC_CAPABLE           0x048
-#define DISPC_DEFAULT_COLOR0        0x04C
-#define DISPC_DEFAULT_COLOR1        0x050
+#define DISPC_DEFAULT_COLOR0    0x04C
+#define DISPC_DEFAULT_COLOR1    0x050
 #define DISPC_TRANS_COLOR0      0x054
 #define DISPC_TRANS_COLOR1      0x058
 #define DISPC_LINE_STATUS       0x05C
@@ -65,17 +65,17 @@
 #define DISPC_GLOBAL_ALPHA      0x074
 #define DISPC_SIZE_DIG          0x078
 #define DISPC_SIZE_LCD          0x07C
-#define DISPC_GFX_BA0           0x080
-#define DISPC_GFX_BA1           0x084
-#define DISPC_GFX_POSITION      0x088
-#define DISPC_GFX_SIZE          0x08C
-#define DISPC_GFX_ATTRIBUTES        0x0A0
-#define DISPC_GFX_FIFO_THRESHOLD    0x0A4
-#define DISPC_GFX_FIFO_SIZE     0x0A8
-#define DISPC_GFX_ROW_INC       0x0AC
-#define DISPC_GFX_PIXEL_INC     0x0B0
-#define DISPC_GFX_WINDOW_SKIP       0x0B4
-#define DISPC_GFX_TABLE_BA      0x0B8
+#define DISPC_GFX_BA0           	0x080
+#define DISPC_GFX_BA1           	0x084
+#define DISPC_GFX_POSITION      	0x088
+#define DISPC_GFX_SIZE          	0x08C
+#define DISPC_GFX_ATTRIBUTES        	0x0A0
+#define DISPC_GFX_FIFO_THRESHOLD    	0x0A4
+#define DISPC_GFX_FIFO_SIZE     	0x0A8
+#define DISPC_GFX_ROW_INC       	0x0AC
+#define DISPC_GFX_PIXEL_INC     	0x0B0
+#define DISPC_GFX_WINDOW_SKIP       	0x0B4
+#define DISPC_GFX_TABLE_BA      	0x0B8
 
 // DISPC_POL_FREQ
 #define IVS     (1 << 12)
@@ -128,6 +128,7 @@
 #define VFP         (4)
 #define VBP         (2)
 #define POL_FREQ_VALUE  (IVS | IHS | IEO | RF)
+
 #elif defined(CONFIG_LCD_NT35510)
 #define LCD_HEIGH   800
 #define LCD_WIDTH   480
@@ -139,9 +140,13 @@
 #define VBP         (5)
 #define POL_FREQ_VALUE  (IVS | IHS | IPC)
 #endif
+
+/* vibrate */
 void vib_ctrl(int value);
+
 /* initialize lcd*/
 void kunlun_lcd_init(void);
+
 /* display logo*/
 void kunlun_lcd_display_logo(void);
 

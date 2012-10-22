@@ -1876,6 +1876,13 @@ omap3630kunlunp2_config :    unconfig
 	mv ./include/config-2.h ./include/config.h
 	cp ./tools/logos/via.bmp ./tools/logos/logo.bmp
 
+omap3630pumav1_config: unconfig
+	@./mkconfig $(@:_config=) arm omap3 omap3630kunlun
+	sed 's/pumav1.h/kunlun.h/;/#include/i #define CONFIG_3630PUMA_V1 1' < \
+	./include/config.h > ./include/config-2.h; \
+	mv ./include/config-2.h ./include/config.h
+	cp ./tools/logos/via.bmp ./tools/logos/logo.bmp
+
 omap3630kunlun_n710e_config :    unconfig
 	@./mkconfig $(@:_config=) arm omap3 omap3630kunlun
 	sed 's/kunlun_n710e.h/kunlun.h/;/#include/i #define CONFIG_3630KUNLUN_N710E 1' < \
