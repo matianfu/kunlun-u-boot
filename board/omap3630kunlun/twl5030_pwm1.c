@@ -31,7 +31,7 @@ void twl5030_pwm1_init(void) {
 		p.484, twl5030 datasheet
 		uglee, Sun Oct  7 12:52:18 CST 2012
 	**/
-	tmp = 0x46;	/** duty cycle 30 percents **/
+	tmp = 0x5A;	/** duty cycle 30 percents **/
         i2c_write(TWL4030_CHIP_PWM1, REG_PWM1ON, 1, &tmp, 1);         	/* PWM1ON */
 	printf("twl write, pwm1on: 0x%02x \n", tmp);	
 

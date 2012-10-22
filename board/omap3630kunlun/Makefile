@@ -52,7 +52,8 @@ OBJS	:= \
 	ispresizer.o \
 	kunlun_mouse.o\
 	gpio.o\
-	lg_lcd.o
+	lg_lcd.o\
+	misc.o
 
 
 $(LIB):	$(OBJS)

@@ -289,19 +289,23 @@ void start_armboot (void)
 		}
 	}
 
+/** TODO **/
 #if defined(CONFIG_BOOTCASE_CHECK)
 	/*check the boot case, add "bootcase= " in commnand line */
 	bootcase_check();
 #endif
-        vib_ctrl(1);          //jhy add for vib ctrl  0915
-        udelay(100000);
-        vib_ctrl(0);
 
-#if defined(CONFIG_LCD_ILI9327) || defined(BOARD_WITH_LCD_SHOW)
-    /*initialize LCD*/
-    kunlun_lcd_init();
-    kunlun_lcd_display_logo();
-#endif /* CONFIG_LCD_ILI9327 */
+/** TODO why not in misc_init_r() ???  **/
+//        vib_ctrl(1);          //jhy add for vib ctrl  0915
+//        udelay(100000);
+//        vib_ctrl(0);
+
+/** TODO why not in misc_init_r() ???  **/
+// #if defined(CONFIG_LCD_ILI9327) || defined(BOARD_WITH_LCD_SHOW)
+//    	/*initialize LCD*/
+//    	kunlun_lcd_init();
+//    	kunlun_lcd_display_logo();
+// #endif 	/* CONFIG_LCD_ILI9327 */
 
 #ifndef CFG_NO_FLASH
 	/* configure available FLASH banks */

@@ -142,7 +142,8 @@
 #endif
 
 /* vibrate */
-void vib_ctrl(int value);
+/* moved to misc.h **/
+// void vib_ctrl(int value);
 
 /* initialize lcd*/
 void kunlun_lcd_init(void);

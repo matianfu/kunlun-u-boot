@@ -1907,30 +1907,6 @@ static void lcd_reset(void)
 #endif
 }
 
- void vib_ctrl(int value)
-{
-    u32 val;
-
-    sr32(CM_ICLKEN_WKUP,3, 1, 1);   //GPIO 1 interface clock is enabled
-    sr32(CM_FCLKEN_WKUP,3, 1, 1);  //GPIO 1 functional clock is enabled
-
-    val = __raw_readl(0x480025F8);  //GPIO_28 mode reg
-    val = val & (0xFFFFFEF8)|(0x04);  // gpio & output mode
-     __raw_writel(val, 0x480025F8);
-
-  if(1==value)
-  {
-    set_gpio_dataout(28, 1);
-  }
- else
-  {
-   set_gpio_dataout(28, 0);
-  }
-
-  //printf("set pin to value:%d and actual value:0x%08X\n", value, reg32_in(OMAP34XX_GPIO1_BASE + 0x03C));
-
-}
-
 /*configure LCD controller & panel before displaying*/
 void kunlun_lcd_init(void)
 {

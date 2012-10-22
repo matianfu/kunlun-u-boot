@@ -20,26 +20,19 @@ typedef struct {
 	char 	pinname[16];
 	int		gpio;		
 	u32		padconf;		/** this is address, should be converted to 
-								(volatile unsigned char/short/int*) when used.
-								example:
-									(*(volatile unsigned char *)(a) = (v))
-								or use 
-									__raw_writeb, __raw_writew, __raw_writel
-									__raw_readb,  __raw_readw,  __raw_readl
-								instead.							**/
-	u16		default_mux;	/** default mux, used for restore mux after test **/
+						(volatile unsigned char/short/int*) when used.
+						example:
+							(*(volatile unsigned char *)(a) = (v))
+							or use 
+							__raw_writeb, __raw_writew, __raw_writel
+							__raw_readb,  __raw_readw,  __raw_readl
+						instead.							**/
+	u16		default_mux;		/** default mux, used for restore mux after test **/
 } gpio_pin;
 
-static gpio_pin gpio_pins[3] = {	
-						{	"LCD_CS" ,0, 0, (IEN | PTD | DIS | M4)},
-						{	"LCD_SCL",0, 0, (IEN | PTD | DIS | M4)},
-						{
-							"LCD_SDA",
-							0,
-							0,
-							(IEN | PTD | DIS | M4)
-						}
-					 };
+static gpio_pin gpio_pins[3] = {{"LCD_CS" , 0, 0, (IEN | PTD | DIS | M4)},
+				{"LCD_SCL", 0, 0, (IEN | PTD | DIS | M4)},
+				{"LCD_SDA", 0, 0, (IEN | PTD | DIS | M4)}};
 
 static int initialized = 0;
 
