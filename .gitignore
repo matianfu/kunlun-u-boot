@@ -14,6 +14,9 @@
 # Compiling dependency
 .depend
 
+# log file
+*.log
+
 System.map
 examples/hello_world
 examples/hello_world.bin

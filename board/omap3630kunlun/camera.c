@@ -10,7 +10,7 @@
 
 #if defined(CONFIG_KUNLUN_CAM) && (defined(CONFIG_LCD_ILI9327) || defined(BOARD_WITH_LCD_SHOW))
 
-#if defined(CONFIG_3630KUNLUN_KL9C) || defined(CONFIG_3630KUNLUN_P2)
+#if defined(CONFIG_3630KUNLUN_KL9C) || defined(CONFIG_3630KUNLUN_P2) || defined(CONFIG_3630PUMA_V1)
 #define CONFIG_CAM_BF3703 1
 #define CONFIG_CAM_HI253 1
 #define SENSOR_OUTPUT_VGA 1
@@ -2669,7 +2669,7 @@ static void isp_enable(int enable)
 /*reset sensor*/
 static void sensor_reset(int type)
 {
-#if defined(CONFIG_3630KUNLUN_KL9C) || defined(CONFIG_3630KUNLUN_P2)
+#if defined(CONFIG_3630KUNLUN_KL9C) || defined(CONFIG_3630KUNLUN_P2) || defined(CONFIG_3630PUMA_V1)
     if(type==_MAIN_SENSOR_){
 
         set_gpio_dataout(98,0);
@@ -2718,7 +2718,7 @@ static void sensor_poweron(int type)
     i2c_write(0x4b,0x7E,1,buf,sizeof(buf));
     udelay(4000);
     DEBUG_INFO("VAUX4 output is expected to 2.8v\n");
-#if defined(CONFIG_3630KUNLUN_KL9C) || defined(CONFIG_3630KUNLUN_P2)
+#if defined(CONFIG_3630KUNLUN_KL9C) || defined(CONFIG_3630KUNLUN_P2) || defined(CONFIG_3630PUMA_V1)
     if(type==_MAIN_SENSOR_){
 
         /* Enable VMMC2 1.85V */
@@ -2739,7 +2739,7 @@ static void sensor_poweron(int type)
 /*enable isp clocks for ov2655*/
 static void sensor_enable_clocks(int type)
 {
-#if defined(CONFIG_3630KUNLUN_KL9C) || defined(CONFIG_3630KUNLUN_P2)
+#if defined(CONFIG_3630KUNLUN_KL9C) || defined(CONFIG_3630KUNLUN_P2) || defined(CONFIG_3630PUMA_V1)
 
     /*enable GPIO 4 function clock*/
     sr32(0x48005000,15,1,1);
@@ -3034,7 +3034,7 @@ int init_sensor(int format,int type)
 
 #ifdef CONFIG_DRIVER_OMAP34XX_I2C
         /*select i2c2 device*/
-    #if defined(CONFIG_3630KUNLUN_KL9C) || defined(CONFIG_3630KUNLUN_P2)
+    #if defined(CONFIG_3630KUNLUN_KL9C) || defined(CONFIG_3630KUNLUN_P2) || defined(CONFIG_3630PUMA_V1)
         select_bus(1,0x190);
     #elif defined(CONFIG_3630KUNLUN_WUDANG)
         select_bus(1,0x190);
@@ -3043,7 +3043,7 @@ int init_sensor(int format,int type)
     #endif
 #endif
 
-#if defined(CONFIG_3630KUNLUN_KL9C) || defined(CONFIG_3630KUNLUN_P2)
+#if defined(CONFIG_3630KUNLUN_KL9C) || defined(CONFIG_3630KUNLUN_P2) || defined(CONFIG_3630PUMA_V1)
 
     sensor_reset(type);
 
