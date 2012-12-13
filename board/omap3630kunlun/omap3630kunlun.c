@@ -206,7 +206,6 @@ void omap_ste_power_on(void)
     gpio_t *gpio5_base = (gpio_t *)OMAP34XX_GPIO5_BASE;
     gpio_t *gpio6_base = (gpio_t *)OMAP34XX_GPIO6_BASE;
 
-
     set_gpio_dataout(162,1);
 
     set_gpio_dataout(159,0);
@@ -786,11 +785,15 @@ int dram_init(void)
 		__raw_writew((VALUE), OMAP34XX_CTRL_BASE + (OFFSET));
 
 #define		CP(x)	(CONTROL_PADCONF_##x)
-
+/***********************************************/
+//removed by myself
+#if 0
 #if defined(CONFIG_3630KUNLUN)
 #undef MUX_DEFAULT_ES2
 #include "kunlun_mux_table.h"
 #endif
+#endif
+/***********************************************/
 #if defined(CONFIG_3630KUNLUN_KL9C)
 #undef MUX_DEFAULT_ES2
 #include "kl9c_mux_table.h"

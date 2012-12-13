@@ -190,7 +190,7 @@
 
 #if (CONFIG_COMMANDS & CFG_CMD_I2C)
 #define CFG_I2C_SPEED            400
-#define CFG_I2C_SLAVE            1
+#define CFG_I2C_SLAVE            1		
 #define CFG_I2C_BUS              0
 #define CFG_I2C_BUS_SELECT       1
 #define CONFIG_DRIVER_OMAP34XX_I2C 1
@@ -227,6 +227,68 @@
 #else
     #define CONFIG_BOOTDELAY         3
 #endif
+
+//fixed by myself
+/************************************************************************************************************************************************/
+#if 0
+#define CONFIG_EXTRA_ENV_SETTINGS		\
+"loadaddr=0x80200000\0"			\
+"vram=16M\0"	\
+"console=ttyS2,115200n8\0"			\
+"defaultdisplay=dvi\0" \
+"dvimode=1024x600MR-16@60\0" \
+"mmcroot=/dev/mmcblk0p2 rw\0"			\
+"mmcrootfstype=ext3 rootwait\0" \
+"mmcargs=setenv bootargs console=${console} "	\
+		"root=${mmcroot} rootdelay=2 "	\
+		"vram=${vram} " \
+		"omapfb.mode=dvi:${dvimode} " \
+		"omapdss.def_disp=${defaultdisplay} " \
+		"rootfstype=${mmcrootfstype} " \
+		"init=/init "  "videoout=omap24xxvout " \
+		"omap_vout.vid1_static_vrfb_alloc=y " "no_console_suspend\0" \
+"loadbootscript=fatload mmc 0 ${loadaddr} boot.scr\0" \
+"bootscript=echo Running bootscript from mmc ...; " \
+	"source ${loadaddr}\0" \
+"loaduimage=fatload mmc 0:1 ${loadaddr} uImage\0"\
+"mmcboot=echo Booting from mmc ...;"		\
+	" run mmcargs;"				\
+	" bootm ${loadaddr}\0"			\
+
+#define CONFIG_BOOTCOMMAND \
+	"if mmcinit 0; then " 			\
+			"if run loadbootscript; then " \
+				"run bootscript; " \
+			"else " \
+				"if run loaduimage; then " 		\
+					" run mmcboot; " \
+				"fi; " \
+			"fi;" \
+	"else run nandboot; " \
+	"fi "
+
+#endif
+
+#if 0
+#define CONFIG_BOOTCOMMAND \
+       "if mmcinit; then " \
+               "if run loadbootscript; then " \
+                       "run bootscript; " \
+               "else " \
+                       "if run loaduimage; then " \
+                               "if run loadramdisk; then " \
+                                       "run ramboot; " \
+                               "else " \
+                                       "run mmcboot; " \
+                               "fi; " \
+                       "else run nandboot; " \
+                       "fi; " \
+               "fi; " \
+       "else run nandboot; fi"
+#endif
+
+/***********************************************************************************************************************************************************/
+
 
 #if 0
 #define CONFIG_EXTRA_ENV_SETTINGS		\
@@ -271,9 +333,16 @@
 #define CONFIG_SERVERIP          128.247.77.158
 #define CONFIG_BOOTFILE          "uImage"
 #endif
-#define CONFIG_BOOTARGS "root=/dev/mmcblk0p2 rw rootdelay=1 console=ttyS2,115200n8 init=/init"
+
+//fixed by myself
+#if 1
+//#define CONFIG_BOOTARGS "root=/dev/mmcblk0p2 rw rootdelay=1 console=ttyS2,115200n8 init=/init"
+#define CONFIG_BOOTARGS "root=/dev/mmcblk0p2 rw rootdelay=1 console=ttyS2,115200n8 init=/init rootdelay=3 vram=16M omapfb.vram=0:16M \
+rootfstype=ext3 omap_vout.vid1_static_vrfb_alloc=y no_console_suspend "
+//#define CONFIG_BOOTARGS "console=ttyS2,115200n8 root=/dev/mmcblk0p2 rw mem=512M rootdelay=3 init=/init rootfstype=ext3 vram=16M omapfb.mode=dvi:1024x600MR-16@60 videoout=omap24xxvout omap_vout.vid1_static_vrfb_alloc=y no_console_suspend"
 #define CONFIG_BOOTCOMMAND  "mmcinit 0;fatload mmc 0 0x80800000 uImage;bootm 0x80800000"
 #define CONFIG_EXTRA_ENV_SETTINGS "boot_kunlun=mmcinit 0;fatload mmc 0 0x80800000 uImage;bootm 0x80800000\0"
+#endif
 
 #define CONFIG_AUTO_COMPLETE     1
 /*

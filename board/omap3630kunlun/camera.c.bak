@@ -9,15 +9,11 @@
 #include <config.h>
 
 #if defined(CONFIG_KUNLUN_CAM) && (defined(CONFIG_LCD_ILI9327) || defined(BOARD_WITH_LCD_SHOW))
-void set_gpio_dataout(int gpio, int value);
-int get_gpio_datain(int gpio);
-extern void set_gpio_oe(int gpio, int value);
+
 #if defined(CONFIG_3630KUNLUN_KL9C) || defined(CONFIG_3630KUNLUN_P2) || defined(CONFIG_3630PUMA_V1)
-//#define CONFIG_CAM_BF3703 1		//modified by myself
-//#define CONFIG_CAM_HI253 1		//modified by myself
-//#define SENSOR_OUTPUT_VGA 1		//...
-#define CONFIG_CAM_OV5640 1
-#define SENSOR_OUTPUT_SVGA 1
+#define CONFIG_CAM_BF3703 1
+#define CONFIG_CAM_HI253 1
+#define SENSOR_OUTPUT_VGA 1
 #elif defined(CONFIG_3630KUNLUN_WUDANG)
 #define CONFIG_CAM_OV5640 1
 #define CONFIG_CAM_HI253 1
@@ -61,8 +57,7 @@ extern void set_gpio_oe(int gpio, int value);
 extern int select_bus(int, int);
 #endif
 #if defined(CONFIG_CAM_OV5640)
-//#define OV5640_ADDR 0x3C
-#define OV5640_ADDR 0x78
+#define OV5640_ADDR 0x3C
 #endif
 
 #if defined(CONFIG_CAM_OV2655)
@@ -2524,227 +2519,18 @@ const static struct camreg ov5640_preview_basic_cfg[]={
     {0xffff,0xff}
 };
 
-/***************************************************************************/
 
-static void gpio_i2c_start()
-{	
-	set_gpio_oe(183, 0);	
-	set_gpio_dataout(168, 1);
-	set_gpio_dataout(183, 1);
-
-//start
-	udelay(10);
-	set_gpio_dataout(183, 0);
-#if 1
-	udelay(5);
-	set_gpio_dataout(168, 0);
-	udelay(5);
-#endif
-}
-
-static void gpio_i2c_stop()
-{
-	set_gpio_oe(183, 0);
-	set_gpio_dataout(168, 1);
-	udelay(10);
-	set_gpio_dataout(183, 1);
-}
-
-static int slave_ack()
-{	
-//printf("------------func = %s line = %d\n", __func__, __LINE__);
-	while (1)
-	{
-		if (0 == get_gpio_datain(183))
-			break;
-		if (1 == get_gpio_datain(183))
-			goto err;
-	}
-	set_gpio_dataout(168, 1);
-
-//	printf("----ack 0\n");
-	udelay(5);
-	set_gpio_dataout(168, 0);
-	udelay(5);
-	return 0;
-err:
-//	printf("----ack 1\n");
-	set_gpio_dataout(168, 0);
-	udelay(5);
-	return -1;
-}
-
-//gpio simulate i2c; scl:gpio168; sda:gpio183
-static int gpio_send_data(char data)
-{
-    char i = 8, mask[8] = {0x0080, 0x0040, 0x0020, 0x0010, 0x0008, 0x0004, 0x0002, 0x0001};
-
-//	set_gpio_oe(183, 0);
-	while (i--) {
-	    if (data & mask[7 - i])		//scl keep low level, change sda data to transport;
-	        set_gpio_dataout(183, 1);
-	    else
-	        set_gpio_dataout(183, 0);
-
-		set_gpio_dataout(168, 1);	//scl rise edge comes, send data to sda line
-	    udelay(5);
-/*********************************/
-//printf("------write register-------0x%x\n", __raw_readl((volatile unsigned int) 0x4905803C));
-/*********************************/
-
-		if (i == 0) 
-			set_gpio_oe(183, 1);
-
-	    set_gpio_dataout(168, 0);
-	    udelay(5);
-	}
-
-    return 0;
-}
-
-static void master_ack()
-{
-	set_gpio_dataout(183, 1);
-	set_gpio_dataout(168, 1);
-
-	udelay(5);
-	set_gpio_dataout(168, 0);
-	udelay(5);
-}
-
-static void gpio_receive_data()
-{
-	int i = 8;
-	unsigned int tmp;
-
-	set_gpio_oe(183, 1);
-	while (i--) {
-		get_gpio_datain(183);
-
-		set_gpio_dataout(168, 1);
-		udelay(5);
-/************/
-//read gpio bank 6 datain register bit 183;
-//		tmp = __raw_readl((volatile unsigned int)0x49058038); 
-//		printf("-------------bank 6 datain register content:0x%x\n", tmp);
-/************/
-
-		if (i == 0) 
-			set_gpio_oe(183, 0);
-
-		set_gpio_dataout(168, 0);
-		udelay(5);
-	}
-}
-
-//gpio simulate I2C;
-static int gpio_i2c_read(unsigned char slave_addr, unsigned short reg_offset, unsigned char *buf)
-{
-	int val;
-	/*enable GPIO 6 function clock*/
-	sr32(0x48005000,17,1,1);
-	/*enable GPIO 6 interface clock*/
-	sr32(0x48005010,17,1,1);
-
-//start
-	gpio_i2c_start();
-//send chip id & write bit
-	gpio_send_data(slave_addr & 0xff);
-	val = slave_ack();
-	if(val < 0)
-		goto stop1;
-//send high reg_offset
-	set_gpio_oe(183, 0);
-	gpio_send_data((reg_offset >> 8) & 0xff);
-	val = slave_ack();
-	if (val < 0)
-		goto stop1;
-//send low reg_offset
-	set_gpio_oe(183, 0);
-	gpio_send_data((reg_offset) & 0xff);
-	val = slave_ack();
-	if (val < 0)
-		goto stop1;
-	else
-//stop
-stop1:
-	gpio_i2c_stop();
-//--------------------------------------------------------------------------
-//start
-	gpio_i2c_start();
-//send chip id & read bit
-	gpio_send_data((slave_addr | 0x1) & 0xff);
-	val = slave_ack();
-	if(val < 0)
-		goto stop;
-//master read for slave;
-	gpio_receive_data();	
-	master_ack();
-//stop
-stop:
-	gpio_i2c_stop();
-//--------------------------------------------------------here is the present work to do;
-//	*buf = (unsigned char)tmp;
-
-//	return *buf;
-	return 0;
-}
-
-static int gpio_i2c_write(unsigned char slave_addr, unsigned short reg_offset, unsigned char *buf)
-{
-	int val;
-	/*enable GPIO 6 function clock*/
-	sr32(0x48005000,17,1,1);
-	/*enable GPIO 6 interface clock*/
-	sr32(0x48005010,17,1,1);
-
-//start
-	gpio_i2c_start();
-//send chip id & write bit
-	gpio_send_data(slave_addr & 0xff);
-	val = slave_ack();
-	if(val < 0)
-		goto stop2;
-//send high reg_offset
-	set_gpio_oe(183, 0);
-	gpio_send_data((reg_offset >> 8) & 0xff);
-	val = slave_ack();
-	if (val < 0)
-		goto stop2;
-//send low reg_offset
-	set_gpio_oe(183, 0);
-	gpio_send_data((reg_offset) & 0xff);
-	val = slave_ack();
-	if (val < 0)
-		goto stop2;
-// to do: write value to related regisetr
-	set_gpio_oe(183, 0);
-	gpio_send_data(*buf & 0xff);
-	val = slave_ack();
-	if (val < 0)
-		goto stop2;	
-	else
-stop2:
-	gpio_i2c_stop();
-
-	return 0;
-}
-/***************************************************************************/
 /*@return 0:success,!0:fail*/
 int  ov5640_write_reg(struct camreg *preg)
 {
     unsigned char udata[1];
     int dwret = 0;
-//    unsigned address = 0;
-    unsigned address = preg->addr;
+    unsigned address = 0;
 
     udata[0] = preg->data;
-#if 0
     address = ( (preg->addr & 0xff) << 8) | ((preg->addr >> 8) & 0xff);
+
     dwret = i2c_write(OV5640_ADDR,address,2,udata,1);
-#endif
-//while (1)
-    dwret = gpio_i2c_write(OV5640_ADDR,address, udata);
 
     if (dwret != 0)
     {
@@ -2755,34 +2541,24 @@ int  ov5640_write_reg(struct camreg *preg)
 }
 
 
-
 int ov5640_read_reg(struct camreg *preg)
 {
     unsigned char udata[1];
     unsigned short address = preg->addr;
-#if 0
     unsigned short temp = address;
 
     /* Swap the address bytes. Higher address 1st and lower address 2nd byte */
     address = address << 8 & 0xFF00;
     address = address  | ((temp >> 8) & 0xFF);
 
-	if(i2c_read(OV5640_ADDR,address,2, udata, 1) != 0){
-	     DEBUG_INFO("Error:%d read from %x addr\r\n",OV5640_ADDR,address);
-	     return -1;
-	 }
-#endif
-/*************************************************************************************/
-	if (gpio_i2c_read(OV5640_ADDR, address, udata) != 0) {
-		DEBUG_INFO("Error:%d read from %x addr\r\n", OV5640_ADDR, address);
-		return -1;
-	}
-
-/************************************************************************************/
-
+    if(i2c_read(OV5640_ADDR,address,2, udata, 1) != 0){
+        DEBUG_INFO("Error:%d read from %x addr\r\n",OV5640_ADDR,address);
+        return -1;
+    }
     preg->data = udata[0];
     return 0;
 }
+
 
 static void ov5640_write_seq(struct camreg *pStream)
 {
@@ -2928,8 +2704,8 @@ static void sensor_reset(int type)
 
     DEBUG_INFO("CAM_RST signal is expected to hold low for 6ms \n");
 }
-/*8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888*/
-#if 0
+
+
 /*power supply on*/
 static void sensor_poweron(int type)
 {
@@ -2959,27 +2735,12 @@ static void sensor_poweron(int type)
 #endif
 
 }
-#endif
-
-static void sensor_poweron(int type)
-{
-	unsigned char buf[1];
-	/*enable VAUX4 (2.8v)output*/
-	select_bus(0,100);
-	buf[0] = 0x09;
-	i2c_write(0x4b,0x81,1,buf,sizeof(buf));
-	buf[0] = 0xE0;
-	i2c_write(0x4b,0x7E,1,buf,sizeof(buf));
-	udelay(4000);
-	DEBUG_INFO("VAUX4 output is expected to 2.8v\n");	
-
-}
-/*888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888*/
 
 /*enable isp clocks for ov2655*/
 static void sensor_enable_clocks(int type)
 {
 #if defined(CONFIG_3630KUNLUN_KL9C) || defined(CONFIG_3630KUNLUN_P2) || defined(CONFIG_3630PUMA_V1)
+
     /*enable GPIO 4 function clock*/
     sr32(0x48005000,15,1,1);
     /*enable GPIO 4 interface clock*/
@@ -2990,20 +2751,17 @@ static void sensor_enable_clocks(int type)
     /*enable GPIO 4 interface clock*/
     sr32(0x48005010,17,1,1);
 
+
     if(type==_MAIN_SENSOR_){
-/*as below modified by myself*/
-#if 0
         set_gpio_dataout(180,1);/*set GPIO180 low level,sub sensor PWD */
         /*wait for 10ms*/
         udelay(1000);
         DEBUG_INFO("SUB_CAM_PWD signal is ectpected HIGH\n");
-#endif
-//      set_gpio_dataout(110,1);   /* GPIO 110ouput 1, PWD */
-        set_gpio_dataout(126, 1);   /* GPIO 126ouput 1, PWD */
+
+        set_gpio_dataout(110,1);   /* GPIO 110ouput 1, PWD */
         /*wait for 10ms*/
-        udelay(10000);
-//      set_gpio_dataout(110,0);   /* GPIO 110ouput 0, PWD */
-	    set_gpio_dataout(126, 0);   /* GPIO 126ouput 0, PWD */
+        udelay(1000);
+        set_gpio_dataout(110,0);   /* GPIO 110ouput 0, PWD */
         DEBUG_INFO("MAIN_CAM_PWD signal is ectpected low\n");
     }else{
         set_gpio_dataout(110,1);   /* GPIO 110ouput 1, PWD */
@@ -3152,6 +2910,8 @@ void init_isp(int format)
     isp_des_obj.resz_out_heigh = LCD_WIDTH;//LCD_HEIGH;
 #endif //end of USE_RESIZER
 
+
+
     //YUV,DATA:16,16bits/pixel,wen,vdhden
     syn_mode = __raw_readl(CCDC_SYN_MODE);
     if(format == OUTPUT_YUV422)
@@ -3212,6 +2972,7 @@ void init_isp(int format)
       */
     __raw_writel(0x1<<11 |  0x1 << 8 | 0x1<< 9 | 0x1<<11 | 0x1<<21 | 0x1 << 24 | 0x1<<25 | 0x1 << 28 |0x1<<29,ISP_IRQ0ENABLE);
 
+
     DEBUG_INFO("ISP_IRQ0ENABLE=%#08x\n",__raw_readl(ISP_IRQ0ENABLE));
     DEBUG_INFO("CCDC_VDINT=%#08x\n",__raw_readl(CCDC_VDINT));
 #if defined(USE_RESIZER)
@@ -3230,7 +2991,10 @@ void init_isp(int format)
     ispresizer_set_outaddr(CAM_BUFFERS_START);
 #endif
     DEBUG_INFO("ISP_IRQ0STATUS=%#08x\n",__raw_readl(ISP_IRQ0STATUS));
+
+
 }
+
 
 #if 0
 static void read_seq(struct camreg *pStream)
@@ -3265,6 +3029,7 @@ static void read_seq(struct camreg *pStream)
 /*initialize sensor*/
 int init_sensor(int format,int type)
 {
+
     struct camreg reg;
 
 #ifdef CONFIG_DRIVER_OMAP34XX_I2C
@@ -3279,11 +3044,11 @@ int init_sensor(int format,int type)
 #endif
 
 #if defined(CONFIG_3630KUNLUN_KL9C) || defined(CONFIG_3630KUNLUN_P2) || defined(CONFIG_3630PUMA_V1)
+
     sensor_reset(type);
+
     if(type==_MAIN_SENSOR_)
     {
-/*8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888*/
-#if 0
         reg.addr = 0x04;
         reg.data = 0x00;
         HI253_read_reg(&reg);
@@ -3297,25 +3062,10 @@ int init_sensor(int format,int type)
         udelay(1000);
         //HI253_Set_Mirror_Flip(1);
         DEBUG_INFO("HI253_Preview_Setting\n");
-#endif
-#if 0
-		reg.addr = 0x300a;
-		reg.data = 0x00;
-		ov5640_read_reg(&reg);
-		
-		printf("Product HIGH id = %x\n",reg.data);
-		
-		reg.addr = 0x300b;
-		reg.data = 0x00;
-		ov5640_read_reg(&reg);
-		
-		printf("Product LOW id = %x\n",reg.data);
-#endif
-		ov5640_write_seq((struct camreg*)ov5640_preview_basic_cfg);
-printf("-------------------func:%s line:%d\n", __func__, __LINE__);
-/*8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888*/
+
     }else {
-#if 0
+
+
         reg.addr= 0xFC;
         reg.data=0x00;
         bf3703_read_reg(&reg);
@@ -3339,8 +3089,8 @@ printf("-------------------func:%s line:%d\n", __func__, __LINE__);
 
         BF3703_write_cmos_sensor(0x13, 0x07);	// Turn ON AEC/AGC/AWB
         udelay(30000);
-#endif	
-		;
+
+
     }
 #elif defined(CONFIG_3630KUNLUN_WUDANG)
     if(type==_MAIN_SENSOR_)
@@ -3358,7 +3108,9 @@ printf("-------------------func:%s line:%d\n", __func__, __LINE__);
         printf("Product LOW id = %x\n",reg.data);
 
         ov5640_write_seq((struct camreg*)ov5640_preview_basic_cfg);
+
     }else {
+
         reg.addr = 0x04;
         reg.data = 0x00;
         HI253_read_reg(&reg);
@@ -3389,10 +3141,13 @@ printf("-------------------func:%s line:%d\n", __func__, __LINE__);
     //ov2655_write_seq((struct camreg*)ov2655_mirror);
     ov2655_write_seq((struct camreg*)ov2655_flip);
     //ov2655_read_seq((struct camreg*)ov2655_common_svgabase);
+
 #endif
 
     return 0;
+
 }
+
 
 static void rotation_90(const u16 *src,u16 *dst,u32 width,u32 height)
 {
@@ -3482,6 +3237,7 @@ void handle_isp_int_poll(void)
     }
 }
 
+
 /*enable isp ccdc*/
 static inline void ispccdc_enable(void)
 {
@@ -3490,6 +3246,7 @@ static inline void ispccdc_enable(void)
 
 int do_camtest ( cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
 {
+
     if(argc != 3){
         printf("usage:cam <poweron/enable/on type>\n");
         return -1;
@@ -3498,7 +3255,7 @@ int do_camtest ( cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
         if(strncmp(argv[2],"main",sizeof("main") - 1)== 0){
             sensor_poweron(_MAIN_SENSOR_);
             sensor_enable_clocks(_MAIN_SENSOR_);
-//           sensor_reset(_MAIN_SENSOR_);			removed by myself
+            sensor_reset(_MAIN_SENSOR_);
             init_sensor(OUTPUT_YUV422,_MAIN_SENSOR_);
         }else{
             printf("initial sub sensor\n");
@@ -3551,6 +3308,7 @@ int do_camtest ( cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
     return 0;
 
 }
+
 
 U_BOOT_CMD(
         cam,	CFG_MAXARGS,	1,	do_camtest,
