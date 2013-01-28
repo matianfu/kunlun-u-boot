@@ -108,8 +108,13 @@
 
 /* Haire N710E. */
 #elif defined(CONFIG_LCD_RM68041_N710E)
+#if 0
 #define LCD_HEIGH   480
 #define LCD_WIDTH   320
+#else
+#define LCD_HEIGH   600
+#define LCD_WIDTH   1024
+#endif
 #define HSW         (10)
 #define HFP         (10)
 #define HBP         (20)

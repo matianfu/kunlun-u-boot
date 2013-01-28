@@ -2933,7 +2933,8 @@ void init_isp(int format)
     isp_ctl = __raw_readl(ISP_CTRL);
     if(format == OUTPUT_YUV422){
         //par bridge is enabled,CCDC_CLK_EN,VS rising edge detect,SBL_WR1_RAM_EN
-        isp_ctl |= 0x3 << 2 | 0x1 << 8 | 0x3 << 14 | 0x1 << 16 | 0x1 << 19;
+//        isp_ctl |= 0x3 << 2 | 0x1 << 8 | 0x3 << 14 | 0x1 << 16 | 0x1 << 19;
+        isp_ctl |= 1 | 0x3 << 2 | 0x1 << 8 | 0x3 << 14 | 0x1 << 16 | 0x1 << 19;
     }else{
         //par bridge is enabled,CCDC_CLK_EN,VS rising edge detect,SBL_WR1_RAM_EN
         isp_ctl |= 0x3 << 2 | 0x1 << 8 | 0x3 << 14 | 0x1 << 16 | 0x1 << 19;
@@ -2942,6 +2943,7 @@ void init_isp(int format)
     isp_ctl |= 0x1 << 20;
 #endif
     __raw_writel(isp_ctl,ISP_CTRL);
+    printf("-----------------------------ISP_CTRL=%#08x\n",__raw_readl(ISP_CTRL));
     DEBUG_INFO("ISP_CTRL=%#08x\n",__raw_readl(ISP_CTRL));
     DEBUG_INFO("CCDC_SYN_MODE=%#08x\n",__raw_readl(CCDC_SYN_MODE));
     sph = isp_des_obj.ccdc_in_width - isp_des_obj.ccdc_out_width;
