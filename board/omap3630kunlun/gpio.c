@@ -106,7 +106,7 @@ int get_gpio_datain(int gpio) {
     tmp=__raw_readl((u32)&gpio_base->oe);
 
     /** test code for output **/
-    // printf("get_gpio_datain, gpio: %d, bank: %d, offset: %d, oe: 0x%04x\n", gpio, bank, offset, tmp);
+     //printf("get_gpio_datain, gpio: %d, bank: %d, offset: %d, oe: 0x%04x\n", gpio, bank, offset, tmp);
     if ((tmp & ( 1 << offset) ) == 0) /* oe bit not set */
     {
     	return -2;

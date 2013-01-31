@@ -12,6 +12,7 @@
 void set_gpio_dataout(int gpio, int value);
 int get_gpio_datain(int gpio);
 extern void set_gpio_oe(int gpio, int value);
+extern void set_gpio_to_input(int gpio);
 #if defined(CONFIG_3630KUNLUN_KL9C) || defined(CONFIG_3630KUNLUN_P2) || defined(CONFIG_3630PUMA_V1)
 //#define CONFIG_CAM_BF3703 1		//modified by myself
 //#define CONFIG_CAM_HI253 1		//modified by myself
@@ -2529,21 +2530,15 @@ const static struct camreg ov5640_preview_basic_cfg[]={
 
 const static struct camreg ov5640_preview_basic_cfg[]={
 	//24Mhz Mclk ,56MHz Pclk, 15fps
-{0x3103, 0x11}, 
-{0x3008, 0x82},
-{0x3008, 0x42},
-{0x3103, 0x03},
-//{0x3017, 0xIT},
-{0x3017, 0xff},
-//{0x3018, 0xIT},
-{0x3018, 0xff},
-{0x3034, 0x18},
-{0x3035, 0x12},
-//{0x3036, 0xIT},
-//vga milt=18
-{0x3036, 0x69},
-{0x3037, 0x13},
-{0x3108, 0x01},
+{0x3103, 0x11}, // SCCB system control
+{0x3008, 0x82}, // software reset
+{0x3008, 0x42}, // software power down
+{0x3103, 0x03}, // SCCB system control
+{0x3017, 0xff}, // set Frex, Vsync, Href, PCLK, D[9:6] input
+{0x3018, 0xff}, // set d[5:0], GPIO[1:0] input
+{0x3034, 0x18}, // MIPI 8-bit mode
+{0x3037, 0x13}, // PLL
+{0x3108, 0x01}, // system divider
 {0x3630, 0x36},
 {0x3631, 0x0e},
 {0x3632, 0xe2},
@@ -2559,253 +2554,203 @@ const static struct camreg ov5640_preview_basic_cfg[]={
 {0x3906, 0x10},
 {0x3901, 0x0a},
 {0x3731, 0x12},
-{0x3600, 0x08},
-{0x3601, 0x33},
-{0x302d, 0x60},
+{0x3600, 0x08}, // VCM debug mode
+{0x3601, 0x33}, // VCM debug mode
+{0x302d, 0x60}, // system control
 {0x3620, 0x52},
 {0x371b, 0x20},
 {0x471c, 0x50},
-{0x3a13, 0x43},
-{0x3a18, 0x00},
-{0x3a19, 0xf8},
+{0x3a13, 0x43}, // AGC pre-gain, 0x40 = 1x
+{0x3a18, 0x00}, // gain ceiling
+{0x3a19, 0xf8}, // gain ceiling
 {0x3635, 0x13},
 {0x3636, 0x03},
 {0x3634, 0x40},
 {0x3622, 0x01},
-{0x3c01, 0x34},
-{0x3c04, 0x28},
-{0x3c05, 0x98},
-{0x3c06, 0x00},
-{0x3c07, 0x07},
-{0x3c08, 0x00},
-{0x3c09, 0x1c},
-{0x3c0a, 0x9c},
-{0x3c0b, 0x40},
-{0x3820, 0x40},
-{0x3821, 0x06},
-/*{0x3814, 0xIT}, */
-{0x3814, 0x31},
-/*{0x3815, 0xIT}, */
-{0x3815, 0x31},
-{0x3800, 0x00},
-{0x3801, 0x00},
-{0x3802, 0x00},
-{0x3803, 0x00},
-{0x3804, 0x0a},
-{0x3805, 0x3f},
-{0x3806, 0x07},
-{0x3807, 0x9f},
-{0x3808, 0x0a},
-{0x3809, 0x20},
-{0x380a, 0x07},
-{0x380b, 0x98},
-{0x380c, 0x0b},
-{0x380d, 0x1c},
-{0x380e, 0x07},
-{0x380f, 0xb0},
-{0x3810, 0x00},
-{0x3811, 0x10},
-{0x3812, 0x00},
-{0x3813, 0x04},
-//{0x3618, 0xIT},
-{0x3618, 0x00},
-//{0x3612, 0xIT},
-{0x3612, 0x29},
+		// 50Hz/60Hz 50/60Hz \B5¿\E2\CC\F5\CE¿\FD\C2\CB
+{0x3c01, 0x34}, // 50/60Hz
+{0x3c04, 0x28}, // threshold for low sum
+{0x3c05, 0x98}, // threshold for high sum
+{0x3c06, 0x00}, // light meter 1 threshold high
+{0x3c08, 0x00}, // light meter 2 threshold high
+{0x3c09, 0x1c}, // light meter 2 threshold low
+{0x3c0a, 0x9c}, // sample number high
+{0x3c0b, 0x40}, // sample number low
+		// timing ¿\D0\F2
+{0x3800, 0x00}, // HS
+{0x3801, 0x00}, // HS
+{0x3802, 0x00}, // VS
+{0x3804, 0x0a}, // HW
+{0x3805, 0x3f}, // HW
+{0x3810, 0x00}, // H offset high
+{0x3811, 0x10}, // H offset low
+{0x3812, 0x00}, // V offset high
 {0x3708, 0x64},
-//{0x3709, 0xIT},
-{0x3709, 0x52},
-//{0x370c, 0xIT},
-{0x370c, 0x03},
-{0x3a02, 0x07},
-{0x3a03, 0xb0},
-{0x3a08, 0x01},
-{0x3a09, 0x27},
-{0x3a0a, 0x00},
-{0x3a0b, 0xf6},
-{0x3a0e, 0x06},
-{0x3a0d, 0x08},
-{0x3a14, 0x07},
-{0x3a15, 0xb0},
-{0x4001, 0x02},
-{0x4004, 0x06},
-{0x4005, 0x1a},
-{0x3000, 0x00},
-{0x3002, 0x1c},
-{0x3004, 0xff},
-{0x3006, 0xc3},
-{0x3007, 0xff},
-{0x300e, 0x45},
+{0x3a08, 0x01}, // B50
+{0x4001, 0x02}, // BLC start line
+{0x4005, 0x1a}, // BLC always update
+{0x3000, 0x00}, // system reset 0
+{0x3002, 0x1c}, // system reset 2
+{0x3004, 0xff}, // clock enable 00
+{0x3006, 0xc3}, // clock enable 2
+{0x300e, 0x25}, // MIPI control, 1 lane, MIPI enable
 {0x302e, 0x08},
-{0x4300, 0x30},
-//{0x4837, 0xIT},
-{0x4837, 0x24},
-{0x501f, 0x00},
+{0x4300, 0x30}, // YUV 422, YUYV
+
+{0x501f, 0x00}, // ISP YUV 422
+{0x4407, 0x04}, // JPEG QS
 {0x440e, 0x00},
-{0x5000, 0xa7},
-/**/
-{0x3824, 0x01},
-//{0x5001, 0xIT},
-{0x5001, 0xff},
-/******/
-{0x3503, 0x00},
-{0x5180, 0xff},
-{0x5181, 0xf2},
-{0x5182, 0x00},
-{0x5183, 0x14},
-{0x5184, 0x25},
-{0x5185, 0x24},
-{0x5186, 0x09},
-{0x5187, 0x09},
-{0x5188, 0x09},
-{0x5189, 0x75},
-{0x518a, 0x54},
-{0x518b, 0xe0},
-{0x518c, 0xb2},
-{0x518d, 0x42},
-{0x518e, 0x3d},
-{0x518f, 0x56},
-{0x5190, 0x46},
-{0x5191, 0xf8},
-{0x5192, 0x04},
-{0x5193, 0x70},
-{0x5194, 0xf0},
-{0x5195, 0xf0},
-{0x5196, 0x03},
-{0x5197, 0x01},
-{0x5198, 0x04},
-{0x5199, 0x12},
-{0x519a, 0x04},
-{0x519b, 0x00},
-{0x519c, 0x06},
-{0x519d, 0x82},
-{0x519e, 0x38},
-{0x5381, 0x1e},
-{0x5382, 0x5b},
-{0x5383, 0x08},
-{0x5384, 0x0a},
-{0x5385, 0x7e},
-{0x5386, 0x88},
-{0x5387, 0x7c},
-{0x5388, 0x6c},
-{0x5389, 0x10},
-{0x538a, 0x01},
-{0x538b, 0x98},
-{0x5300, 0x08},
-{0x5301, 0x30},
-{0x5302, 0x10},
-{0x5303, 0x00},
-{0x5304, 0x08},
-{0x5305, 0x30},
-{0x5306, 0x08},
-{0x5307, 0x16},
-{0x5309, 0x08},
-{0x530a, 0x30},
-{0x530b, 0x04},
-{0x530c, 0x06},
-{0x5480, 0x01},
-{0x5481, 0x08},
-{0x5482, 0x14},
-{0x5483, 0x28},
-{0x5484, 0x51},
-{0x5485, 0x65},
-{0x5486, 0x71},
-{0x5487, 0x7d},
-{0x5488, 0x87},
-{0x5489, 0x91},
-{0x548a, 0x9a},
-{0x548b, 0xaa},
-{0x548c, 0xb8},
-{0x548d, 0xcd},
-{0x548e, 0xdd},
-{0x548f, 0xea},
-{0x5490, 0x1d},
-{0x5580, 0x02},
-{0x5583, 0x40},
-{0x5584, 0x10},
-{0x5589, 0x10},
-{0x558a, 0x00},
-{0x558b, 0xf8},
-{0x5800, 0x23},
-{0x5801, 0x14},
-{0x5802, 0x0f},
-{0x5803, 0x0f},
-{0x5804, 0x12},
-{0x5805, 0x26},
-{0x5806, 0x0c},
-{0x5807, 0x08},
-{0x5808, 0x05},
-{0x5809, 0x05},
-{0x580a, 0x08},
-{0x580b, 0x0d},
-{0x580c, 0x08},
-{0x580d, 0x03},
-{0x580e, 0x00},
-{0x580f, 0x00},
-{0x5810, 0x03},
-{0x5811, 0x09},
-{0x5812, 0x07},
-{0x5813, 0x03},
-{0x5814, 0x00},
-{0x5815, 0x01},
-{0x5816, 0x03},
-{0x5817, 0x08},
-{0x5818, 0x0d},
-{0x5819, 0x08},
-{0x581a, 0x05},
-{0x581b, 0x06},
-{0x581c, 0x08},
-{0x581d, 0x0e},
-{0x581e, 0x29},
-{0x581f, 0x17},
-{0x5820, 0x11},
-{0x5821, 0x11},
-{0x5822, 0x15},
-{0x5823, 0x28},
-{0x5824, 0x46},
-{0x5825, 0x26},
-{0x5826, 0x08},
-{0x5827, 0x26},
-{0x5828, 0x64},
-{0x5829, 0x26},
-{0x582a, 0x24},
-{0x582b, 0x22},
-{0x582c, 0x24},
-{0x582d, 0x24},
-{0x582e, 0x06},
-{0x582f, 0x22},
-{0x5830, 0x40},
-{0x5831, 0x42},
-{0x5832, 0x24},
-{0x5833, 0x26},
-{0x5834, 0x24},
-{0x5835, 0x22},
-{0x5836, 0x22},
-{0x5837, 0x26},
-{0x5838, 0x44},
-{0x5839, 0x24},
-{0x583a, 0x26},
-{0x583b, 0x28},
-{0x583c, 0x42},
-{0x5025, 0x00},
-{0x3a0f, 0x30},
-{0x3a10, 0x28},
-{0x3a1b, 0x30},
-{0x3a1e, 0x26},
-{0x3a11, 0x60},
-{0x3a1f, 0x14},
+{0x5000, 0xa7}, // ISP control, Lenc on, gamma on, BPC on, WPC on, CIP on
+		 // UV adjust UV?<B2>?<A5><BA><U+0376>?<F7><D5><FB>
+{0x5580, 0x06}, // sat on, contrast on
+{0x5583, 0x40}, // sat U
+{0x5584, 0x10}, // sat V
+{0x5589, 0x10}, // UV adjust th1
+{0x558a, 0x00}, // UV adjust th2[8]
+{0x558b, 0xf8}, // UV adjust th2[7:0]
+{0x501d, 0x04}, // enable manual offset of contrast
+		//chg-s for zte objective test 2012.05.30
+		//reviewed by yuan
+		//TL84 LENC setting
+{0x5800, 0x3b},    
+{0x5801, 0x1c},    
+{0x5802, 0x17},    
+{0x5803, 0x18},    
+{0x5804, 0x1c},    
+{0x5805, 0x3f},    
+{0x5806, 0x11},    
+{0x5807, 0xb },    
+{0x5808, 0x8 },    
+{0x5809, 0x8 },    
+{0x580a, 0xc },    
+{0x580b, 0x12},    
+{0x580c, 0xb },    
+{0x580d, 0x3 },    
+{0x580e, 0x0 },    
+{0x580f, 0x0 },    
+{0x5810, 0x4 },    
+{0x5811, 0xe },    
+{0x5812, 0xb },    
+{0x5813, 0x3 },    
+{0x5814, 0x0 },    
+{0x5815, 0x0 },    
+{0x5816, 0x4 },    
+{0x5817, 0xd },    
+{0x5818, 0xf },    
+{0x5819, 0x9 },    
+{0x581a, 0x5 },    
+{0x581b, 0x6 },    
+{0x581c, 0xa },    
+{0x581d, 0x12},    
+{0x581e, 0x32},    
+{0x581f, 0x1a},    
+{0x5820, 0x15},    
+{0x5821, 0x15},    
+{0x5822, 0x1b},    
+{0x5823, 0x36},    
+{0x5824, 0x64},    
+{0x5825, 0x26},    
+{0x5826, 0x6 },    
+{0x5827, 0x26},    
+{0x5828, 0x84},    
+{0x5829, 0x46},    
+{0x582a, 0x64},    
+{0x582b, 0x62},    
+{0x582c, 0x44},    
+{0x582d, 0x46},    
+{0x582e, 0x24},    
+{0x582f, 0x62},    
+{0x5830, 0x60},    
+{0x5831, 0x62},    
+{0x5832, 0x24},    
+{0x5833, 0x26},    
+{0x5834, 0x64},    
+{0x5835, 0x64},    
+{0x5836, 0x44},    
+{0x5837, 0x46},    
+{0x5838, 0x64},    
+{0x5839, 0x48},    
+{0x583a, 0x28},    
+{0x583b, 0x48},    
+{0x583c, 0x86},    
+{0x583d, 0xae},    
+{0x5180, 0xff},    //  ;awb
+{0x5181, 0xf2},    
+{0x5182, 0x0 },    
+{0x5183, 0x14},    
+{0x5184, 0x25},    
+{0x5185, 0x24},    
+{0x5186, 0xc },    
+{0x5187, 0x2e},    
+{0x5188, 0xf },    
+{0x5189, 0x75},    
+{0x518a, 0x56},    
+{0x518b, 0xfa},    
+{0x518c, 0xbb},    
+{0x518d, 0x42},    
+{0x518e, 0x3b},    
+{0x518f, 0x56},    
+{0x5190, 0x48},    
+{0x5191, 0xf8},    
+{0x5192, 0x4 },    
+{0x5193, 0x70},    
+{0x5194, 0xf0},    
+{0x5195, 0xf0},    
+{0x5196, 0x3 },    
+{0x5197, 0x1 },    
+{0x5198, 0x6 },    
+{0x5199, 0x7a},    
+{0x519a, 0x4 },    
+{0x519b, 0x0 },    
+{0x519c, 0x4 },    
+{0x519d, 0xb7},     
+{0x519e, 0x38},     
+{0x5381, 0x1c},    // ;cmx
+{0x5382, 0x5a},  
+{0x5383, 0x6 }, 
+{0x5384, 0x8 }, 
+{0x5385, 0x6f},    // ;6a 
+{0x5386, 0x78},    // ;72 
+{0x5387, 0x6d},    // ;68 
+{0x5388, 0x5e},    // ;5a 
+{0x5389, 0xf },    // ;e 
+{0x538b, 0x98}, 
+{0x538a, 0x1 }, 
+{0x5490, 0x25},    // ;gamma  
+{0x5481, 0x6 },   
+{0x5482, 0xd },   
+{0x5483, 0x1e},   
+{0x5484, 0x45},   
+{0x5485, 0x58},   
+{0x5486, 0x63},   
+{0x5487, 0x6f},   
+{0x5488, 0x79},   
+{0x5489, 0x84},   
+{0x548a, 0x8f},   
+{0x548b, 0xa1},   
+{0x548c, 0xb0},   
+{0x548d, 0xc5},   
+{0x548e, 0xd5},   
+{0x548f, 0xe4},   
+{0x3a0f, 0x2c},    // ;AE target
+{0x3a10, 0x24},  
+{0x3a11, 0x51},  
+{0x3a1b, 0x2c},  
+{0x3a1e, 0x24},  
+{0x3a1f, 0x10},  
 
-//{0x4202, 0xIT},
-
-{0x3008, 0x02},
+		//chg-e for zte objective test 2012.05.30
+{0x3008, 0x02}, // wake up
 {0xffff, 0xff}
 };
-
 /***************************************************************************/
 
 static void gpio_i2c_start()
 {	
 	set_gpio_oe(183, 0);	
-	set_gpio_dataout(183, 1);
+//	set_gpio_dataout(183, 1);
+	set_gpio_to_input(183);
+udelay(100);
 	set_gpio_dataout(168, 1);
 
 //start
@@ -2821,9 +2766,43 @@ static void gpio_i2c_start()
 static void gpio_i2c_stop()
 {
 	set_gpio_oe(183, 0);
+udelay(100);
 	set_gpio_dataout(168, 1);
 	udelay(1000);
-	set_gpio_dataout(183, 1);
+//	set_gpio_dataout(183, 1);
+	set_gpio_to_input(183);
+}
+
+//gpio simulate i2c; scl:gpio168; sda:gpio183
+static int gpio_send_data(char data)
+{
+    char i = 8, mask[8] = {0x0080, 0x0040, 0x0020, 0x0010, 0x0008, 0x0004, 0x0002, 0x0001};
+
+	set_gpio_oe(183, 0);
+	while (i--) {
+	    if (data & mask[7 - i])	//scl keep low level, change sda data to transport;
+//	        set_gpio_dataout(183, 1);
+			set_gpio_to_input(183);
+	    else
+	        set_gpio_dataout(183, 0);
+
+udelay(100);						//to stable the sda 1/28;
+		set_gpio_dataout(168, 1);	//scl rise edge comes, send data to sda line
+	    udelay(1000);
+/*********************************/
+//printf("------write register-------0x%x\n", __raw_readl(() 0x4905803C));
+/*********************************/
+	    set_gpio_dataout(168, 0);
+#if 1
+		if (i == 0) 
+//			set_gpio_dataout(183, 1);
+			set_gpio_to_input(183);
+#endif
+
+		udelay(1000);
+	}
+
+    return 0;
 }
 
 static int slave_ack()
@@ -2836,19 +2815,17 @@ static int slave_ack()
 	udelay(1000);
 	set_gpio_dataout(168, 0);
 #endif
-	set_gpio_oe(183, 1);
-	udelay(1000);
 
 	set_gpio_dataout(168, 1);
 /************************************************/
 #if 1
 	while (1) {
 		if (0 == get_gpio_datain(183)) {
-			set_gpio_dataout(183, 0);
+//			set_gpio_oe(183, 0);
 			break;
 		}
 		if (1 == get_gpio_datain(183)) {
-			set_gpio_dataout(183, 0);
+//			set_gpio_oe(183, 0);
 			goto err;
 		}
 	}
@@ -2868,76 +2845,75 @@ err:
 	return -1;
 }
 
-//gpio simulate i2c; scl:gpio168; sda:gpio183
-static int gpio_send_data(char data)
+static void gpio_receive_data(unsigned char *buf)
 {
-    char i = 8, mask[8] = {0x0080, 0x0040, 0x0020, 0x0010, 0x0008, 0x0004, 0x0002, 0x0001};
+	int i = 8, val;
+	unsigned int tmp[8] = {0};
 
-	set_gpio_oe(183, 0);
-	while (i--) {
-	    if (data & mask[7 - i])	//scl keep low level, change sda data to transport;
-	        set_gpio_dataout(183, 1);
-	    else
-	        set_gpio_dataout(183, 0);
+	*buf = 0;
 
-		set_gpio_dataout(168, 1);	//scl rise edge comes, send data to sda line
-	    udelay(1000);
-/*********************************/
-//printf("------write register-------0x%x\n", __raw_readl((volatile unsigned int) 0x4905803C));
-/*********************************/
-	    set_gpio_dataout(168, 0);
-#if 1
-		if (i == 0) 
-//			set_gpio_oe(183, 1);
-			set_gpio_dataout(183, 1);
+	set_gpio_oe(183, 1);
+#if 0
+val = __raw_readl(0x49058044);
+val |= 1 << 23;
+__raw_writel(val, 0x49058044);
+
+val = __raw_readl(0x49058020);
+val |= 1 << 23;
+__raw_writel(val, 0x49058020);
+
+val = __raw_readl(0x4905801c);
+val |= 1 << 23;
+__raw_writel(val, 0x4905801c);
+
+val = __raw_readl(0x4905802c);
+val |= 1 << 23;
+__raw_writel(val, 0x4905802c);
 #endif
+	while (i--) {
+		udelay(1000);
+		set_gpio_dataout(168, 1);
 
-	    udelay(1000);
+		val = get_gpio_datain(183);
+	//	*buf |= (tmp << i);
+/************/
+//read gpio bank 6 datain register bit 183;
+#if 1
+		tmp[ 7 - i] = __raw_readl(0x49058038); 
+#endif
+#if 1
+		if (tmp[7 - i] & ((1 << 24) - 1 - ((1 << 23) - 1)))
+			*buf |= (1 << i);
+		else
+			*buf |= (0 << i);
+#endif
+//printf("-----------------datain bit:%x *buf:%x\n", val, *buf);
+/************/
+		udelay(1000);
+		set_gpio_dataout(168, 0);
+#if 0
+		if (i == 0) 
+			set_gpio_oe(183, 0);
+#endif
 	}
-
-    return 0;
+	udelay(1000);
+#if 0
+	for (i = 0; i < 8; i++)	
+		printf("-------bank 6 datain register content:0x%x\n", tmp[i]);
+#endif
 }
 
 static void master_ack()
 {
+	set_gpio_oe(183, 0);
 	set_gpio_dataout(183, 1);
+//	set_gpio_to_input(183);
+udelay(100);
 	set_gpio_dataout(168, 1);
 
 	udelay(1000);
 	set_gpio_dataout(168, 0);
 	udelay(1000);
-}
-
-static void gpio_receive_data(unsigned char *buf)
-{
-	int i = 8;
-	unsigned char tmp;
-
-	set_gpio_oe(183, 1);
-	udelay(1000);
-
-	while (i--) {
-		set_gpio_dataout(168, 1);
-		tmp = get_gpio_datain(183);
-		*buf |= (tmp << i);
-/************/
-//read gpio bank 6 datain register bit 183;
-#if 0
-		tmp = __raw_readl((volatile unsigned int)0x49058038); 
-		if (tmp & ((1 << 24) - 1 - ((1 << 23) - 1)))
-			*buf |= 1 << i;
-		else
-			*buf |= 0 << i;
-//		printf("-------bank 6 datain register content:0x%x  *buf:%x\n", tmp, *buf);
-#endif
-/************/
-		udelay(1000);
-		if (i == 0) 
-			set_gpio_oe(183, 0);
-
-		set_gpio_dataout(168, 0);
-		udelay(1000);
-	}
 }
 
 //gpio simulate I2C;
@@ -2979,7 +2955,7 @@ stop1:
 //start
 	gpio_i2c_start();
 //send chip id & read bit
-	gpio_send_data((slave_addr & 0xff) | 1);
+	gpio_send_data((slave_addr & 0xff) | 0x01);
 	val = slave_ack();
 //printf("-----line:%d val:%d\n", __LINE__, val);
 	if(val < 0)
@@ -3030,7 +3006,6 @@ set_gpio_oe(168, 0);
 	val = slave_ack();
 	if (val < 0)
 		goto stop2;	
-	else
 stop2:
 	gpio_i2c_stop();
 
@@ -3051,8 +3026,8 @@ int  ov5640_write_reg(struct camreg *preg)
     dwret = i2c_write(OV5640_ADDR,address,2,udata,1);
 #endif
 //while (1)
+printf("-----------address:%x i2c write data:%x\n", address, udata[0]);
     dwret = gpio_i2c_write(OV5640_ADDR,address, udata);
-printf("*-*************address:%x******i2c write data:%x\n", address, udata[0]);
 
     if (dwret != 0)
     {
@@ -3079,12 +3054,10 @@ int ov5640_read_reg(struct camreg *preg)
 	 }
 #endif
 /******************************************************************************/
-while (1)
 	if (gpio_i2c_read(OV5640_ADDR, address, udata) != 0) {
 		DEBUG_INFO("Error:%d read from %x addr\r\n",OV5640_ADDR,address);
 		return -1;
 	}
-
 /*******************************************************************************/
 
     preg->data = udata[0];
@@ -3113,7 +3086,7 @@ static void ov5640_write_seq(struct camreg *pStream)
         {
             ov5640_write_reg( pCamReg );
 			ov5640_read_reg(pCamReg);
-printf("-----------------------------pCamReg->addr = 0x%x pCamReg->data = %x\n", pCamReg->addr, pCamReg->data);
+printf("-------------------------read again-pCamReg->addr = 0x%x pCamReg->data = %x\n", pCamReg->addr, pCamReg->data);
         }
         pCamReg++;
     }
@@ -3428,35 +3401,35 @@ printf("-----------------------------first line of init_isp\n");
 	unsigned int tmp = 0;
 /*********************************************************************************/
 	//CAM module clock selection 0x4 divisor
-	tmp = __raw_readl((volatile unsigned int)0x48004f40);
+	tmp = __raw_readl(0x48004f40);
 	tmp |= 0x4;
-	__raw_writel(tmp, (volatile unsigned int)0x48004f40);
+	__raw_writel(tmp, 0x48004f40);
 
 	//enable CAM_MCLK, CSI2_96M_FCLK. in other word, control the modules functional clock activity;
-	tmp = __raw_readl((volatile unsigned int)0x48004f00);	//read CM_FCLKEN_CAM;
+	tmp = __raw_readl(0x48004f00);	//read CM_FCLKEN_CAM;
 	tmp |= 0x3;
-	__raw_writel(tmp, (volatile unsigned int)0x48004f00);
+	__raw_writel(tmp, 0x48004f00);
 
 	//enable CAM_L3_ICLK and CAM_L4_ICLK;
-	tmp = __raw_readl((volatile unsigned int)0x48004f10);
+	tmp = __raw_readl(0x48004f10);
 	tmp |= 0x1;
-	__raw_writel(tmp, (volatile unsigned int)0x48004f10);
+	__raw_writel(tmp, 0x48004f10);
 //access to a CSI2 receiver register;
-__raw_readl((volatile unsigned int)0x480bd814);//read CSI2_SYSSTATUS
+__raw_readl(0x480bd814);//read CSI2_SYSSTATUS
 	//reset CSI2 Receiver;
-	tmp = __raw_readl((volatile unsigned int)(0x480bd810));	//read CSI2_SYSCONFIG
+	tmp = __raw_readl(0x480bd810);	//read CSI2_SYSCONFIG
 	tmp |= 0x1 << 1;
-	__raw_writel(tmp, (volatile unsigned int)(0x480bd810));
+	__raw_writel(tmp, 0x480bd810);
 
 /*---------------------------------------*/
-tmp = __raw_readl((volatile unsigned int)0x480bd850);
+tmp = __raw_readl(0x480bd850);
 tmp |= 1 << 30;
-__raw_writel(tmp, (volatile unsigned int)0x480bd850);
+__raw_writel(tmp, 0x480bd850);
 /*---------------------------------------*/
 
 	int cnt = 20;
 	while (1) {
-		tmp = __raw_readl((volatile unsigned int)0x480bd814);//read CSI2_SYSSTATUS
+		tmp = __raw_readl(0x480bd814);//read CSI2_SYSSTATUS
 //		if ((!(tmp & 0x00000001)) && cnt == 0) {
 		if (!(tmp & 0x00000001)) {
 //			printf("Error occurred during reset stage\n");
@@ -3472,7 +3445,7 @@ printf("-----------------------------%s %d\n", __func__, __LINE__);
 	//1, CSI2_PHY_CFG.RESET_DONE	
 	cnt = 0;
 	while (1) {
-		tmp = __raw_readl((volatile unsigned int)0x480bd974);
+		tmp = __raw_readl(0x480bd974);
 		if (tmp & 0x20000000) 
 			break;
 		udelay(100);
@@ -3481,106 +3454,106 @@ printf("-----------------------------%s %d\n", __func__, __LINE__);
 printf("-----------------------------%s %d\n", __func__, __LINE__);
 	printf("PHY reset completed correctly\n");	
 	//2, MSTANDBY_MOD bit
-	tmp = __raw_readl((volatile unsigned int)0x480bd810);	//read CSI2_SYSCONFIG
+	tmp = __raw_readl(0x480bd810);	//read CSI2_SYSCONFIG
 	tmp |= 0x1 << 12;
-	__raw_writel(tmp, (volatile unsigned int)0x480bd810);
+	__raw_writel(tmp, 0x480bd810);
 	//3, configure CSI2_IRQENABLE
-	tmp = __raw_readl((volatile unsigned int)0x480bd81c);	
+	tmp = __raw_readl(0x480bd81c);	
 	tmp |= 0x7fff;
-	__raw_writel(tmp, (volatile unsigned int)0x480bd81c);
+	__raw_writel(tmp, 0x480bd81c);
 	//4, configure the PHY interrupt generation CSI2_COMPLEXIO1_IRQENABLE
-	tmp = __raw_readl((volatile unsigned int)0x480bd860);	
+	tmp = __raw_readl(0x480bd860);	
 	tmp |= 0x000fffff;
-	__raw_writel(tmp, (volatile unsigned int)0x480bd860);
+	__raw_writel(tmp, 0x480bd860);
 	//5, start PHY: set CSI2_COMPLEXIO_CFG
-	tmp = __raw_readl((volatile unsigned int)0x480bd850);
+	tmp = __raw_readl(0x480bd850);
 	tmp |= (0x1 << 27 | 0 << 28);
-	__raw_writel(tmp, (volatile unsigned int)0x480bd850);
+	__raw_writel(tmp, 0x480bd850);
 
 	udelay(100);
 
 	//check PHY status
 	do {
-		tmp = __raw_readl((volatile unsigned int)0x480bd850);
+		tmp = __raw_readl(0x480bd850);
 		printf("PHY state 0x%x\n", tmp);
 	}	while (!((tmp & 0x02000000) && !(tmp & 0x04000000))); 
 	//6, configure the PHY reset value;
 #if 0
-	tmp = __raw_readl((volatile unsigned int)0x);
+	tmp = __raw_readl(()0x);
 	tmp |= 
-	__raw_writel(tmp, (volatile unsigned int)0x);
+	__raw_writel(tmp, ()0x);
 #endif	
 	//7, set CSI2_TIMING[15]
-	tmp = __raw_readl((volatile unsigned int)0x480bd86c);
+	tmp = __raw_readl(0x480bd86c);
 	tmp |= 0x1 << 15; 
-	__raw_writel(tmp, (volatile unsigned int)0x480bd86c);
+	__raw_writel(tmp, 0x480bd86c);
 	//8, set CSI2_CRTL[2] ECC_EN
-	tmp = __raw_readl((volatile unsigned int)0x480bd840);
+	tmp = __raw_readl(0x480bd840);
 	tmp |= 0x1 << 2; 
-	__raw_writel(tmp, (volatile unsigned int)0x480bd840);
+	__raw_writel(tmp, 0x480bd840);
 	//9, start CSI2 receiver by setting CSI2_CRTL[0]
-	tmp = __raw_readl((volatile unsigned int)0x480BD840);
+	tmp = __raw_readl(0x480BD840);
 	tmp |= 0x1; 
-	__raw_writel(tmp, (volatile unsigned int)0x480BD840);
+	__raw_writel(tmp, 0x480BD840);
 	//10, 	CSI2_CTx_CTRL2  YUV422 10bit,  
-	tmp = __raw_readl((volatile unsigned int)(0x480bd874 + 0x20 * 0));
+	tmp = __raw_readl((0x480bd874 + 0x20 * 0));
 	tmp |= 0x1f; 
-	__raw_writel(tmp, (volatile unsigned int)(0x480bd874 + 0x20 * 0));
+	__raw_writel(tmp, (0x480bd874 + 0x20 * 0));
 	//CSI2_CTx_CTRL1[26:23] FEC_NUMBER bit field to 0x1 for a progressive video, not 0x2 for an interlaced viedo;	capture an infinite number of frames; enable the crc
-	tmp = __raw_readl((volatile unsigned int)(0x480bd870 + 0x20 * 0));
+	tmp = __raw_readl((0x480bd870 + 0x20 * 0));
 	tmp |= (0x1 << 26 | 0 << 8 | 0 << 9 | 0 << 10 | 0 << 11 | 0 << 12 | 0 << 13 << 0<<14 | 0 << 15| 0 << 4 | 1 << 5); 
-	__raw_writel(tmp, (volatile unsigned int)(0x480bd870 + 0x20 * 0));
+	__raw_writel(tmp, (0x480bd870 + 0x20 * 0));
 	//configure the DMA engine for the current channel;				????????????????
 	unsigned int dma;
 	dma = malloc(sizeof(800 * 600 * 10 / 8));
-	tmp = __raw_readl((volatile unsigned int)(0x480bd87c + 0x20 * 0));
+	tmp = __raw_readl((0x480bd87c + 0x20 * 0));
 	tmp |= dma << 5;
-	__raw_writel(tmp, (volatile unsigned int)(0x480bd87c + 0x20 * 0));
+	__raw_writel(tmp, (0x480bd87c + 0x20 * 0));
 
-	tmp = __raw_readl((volatile unsigned int)(0x480bd880 + 0x20 * 0));
+	tmp = __raw_readl((0x480bd880 + 0x20 * 0));
 	tmp |= dma << 5;
-	__raw_writel(tmp, (volatile unsigned int)(0x480bd880 + 0x20 * 0));	
+	__raw_writel(tmp, (0x480bd880 + 0x20 * 0));	
 
-	tmp = __raw_readl((volatile unsigned int)(0x480bd88c + 0x20 * 0));
+	tmp = __raw_readl((0x480bd88c + 0x20 * 0));
 	tmp |= 0x0000 << 16;
-	__raw_writel(tmp, (volatile unsigned int)(0x480bd88c + 0x20 * 0));
+	__raw_writel(tmp, (0x480bd88c + 0x20 * 0));
 	// divisor of Mclk
-	tmp = __raw_readl((volatile unsigned int)0x480bc050);
+	tmp = __raw_readl(0x480bc050);
 	tmp |= (0x4 | 1 << 21 | 1 << 22 | 1 << 23 | 1 << 29 | 1 << 27 | 0 << 28 | 1 << 31 | 1 << 24 | 1 << 26 | 1 << 30 | 0x004 << 10);
-	__raw_writel(tmp, (volatile unsigned int)0x480bc050);
+	__raw_writel(tmp, 0x480bc050);
 	//TCTRL_SHUT_DELAY	
-	tmp = __raw_readl((volatile unsigned int)0x480bc060);
+	tmp = __raw_readl(0x480bc060);
 	tmp |= 100;
-	__raw_writel(tmp, (volatile unsigned int)0x480bc060);
+	__raw_writel(tmp, 0x480bc060);
 	//TCTRL_PSTRB_DELAY
-	tmp = __raw_readl((volatile unsigned int)0x480BC058);
+	tmp = __raw_readl(0x480BC058);
 	tmp |= 400;
-	__raw_writel(tmp, (volatile unsigned int)0x480BC058);
+	__raw_writel(tmp, 0x480BC058);
 	//TCTRL_STRB_DELAY
-	tmp = __raw_readl((volatile unsigned int)0x480BC05c);
+	tmp = __raw_readl(0x480BC05c);
 	tmp |= 1300;
-	__raw_writel(tmp, (volatile unsigned int)0x480BC05c);
+	__raw_writel(tmp, 0x480BC05c);
 
 	//TCTRL_SHUT_LENGTH
-	tmp = __raw_readl((volatile unsigned int)0x480BC06c);
+	tmp = __raw_readl(0x480BC06c);
 	tmp |= 200;
-	__raw_writel(tmp, (volatile unsigned int)0x480BC06c);
+	__raw_writel(tmp, 0x480BC06c);
 	//TCTRL_PSTRB_LENGTH
-	tmp = __raw_readl((volatile unsigned int)0x480BC064);
+	tmp = __raw_readl(0x480BC064);
 	tmp |= 100;
-	__raw_writel(tmp, (volatile unsigned int)0x480BC064);
+	__raw_writel(tmp, 0x480BC064);
 	//TCTRL_STRB_LENGTH
-	tmp = __raw_readl((volatile unsigned int)0x480BC068);
+	tmp = __raw_readl(0x480BC068);
 	tmp |= 300;
-	__raw_writel(tmp, (volatile unsigned int)0x480BC068);
+	__raw_writel(tmp, 0x480BC068);
 	//TCTRL_GRESET_LENGTH
-	tmp = __raw_readl((volatile unsigned int)0x480BC030);
+	tmp = __raw_readl(0x480BC030);
 	tmp |= 200;
-	__raw_writel(tmp, (volatile unsigned int)0x480BC030);
+	__raw_writel(tmp, 0x480BC030);
 	//TCTRL_PSTRB_REPLAY
-	tmp = __raw_readl((volatile unsigned int)0x480BC034);
+	tmp = __raw_readl(0x480BC034);
 	tmp |= (300 | 0x2 << 25);
-	__raw_writel(tmp, (volatile unsigned int)0x480BC034);
+	__raw_writel(tmp, 0x480BC034);
 
 /*********************************************************************************/
 printf("-----------------------------CSI2A receiver inited\n");
@@ -3591,6 +3564,10 @@ printf("-----------------------------CSI2A receiver inited\n");
     while((__raw_readl(ISP_SYSSTATUS) & 0x1) == 0)
         udelay(1000);
     DEBUG_INFO("ISP reset done\r\n");
+/***************************/
+printf("--------------csi2_irqstat:%x\n", __raw_readl(0x480bd818));
+/***************************/
+
 
 #if defined(SENSOR_OUTPUT_SVGA)
     isp_des_obj.ccdc_in_width = 800;
@@ -3643,11 +3620,11 @@ printf("-----------------------------CSI2A receiver inited\n");
 
 /***********************************************************/
 //black-level compensation disable;
-__raw_writel(0x0, (volatile unsigned int)0x480BC63C);
+__raw_writel(0x0, 0x480BC63C);
 
-tmp = __raw_readl((volatile unsigned int)0x480BC658);
+tmp = __raw_readl(0x480BC658);
 tmp |= 0 << 15;
-__raw_writel(tmp, (volatile unsigned int)0x480BC658);
+__raw_writel(tmp, 0x480BC658);
 /***********************************************************/
 
     isp_ctl = __raw_readl(ISP_CTRL);
@@ -3715,42 +3692,42 @@ __raw_writel(tmp, (volatile unsigned int)0x480BC658);
 
 /*******************************************************************************/
 //preview: function enable/disable, I/O ports;
-	tmp = __raw_readl((volatile unsigned int)0x480bce04);
+	tmp = __raw_readl(0x480bce04);
 	tmp |= 1 << 5 | 1 << 7 | 1 << 6 | 1 << 21 | 1 << 8 | 1 << 9 | 1 << 10 | 1 << 26 | 1 << 15 | 1 << 16 | 1 << 27 | 0 << 2 | 1 << 3 | 1 << 20 | 1 << 19; 
-	__raw_writel(tmp, (volatile unsigned int)0x480bce04);
+	__raw_writel(tmp, 0x480bce04);
 
 	//PRV_HORZ_INFO		
-	tmp = __raw_readl((volatile unsigned int)0x480bce08);
+	tmp = __raw_readl(0x480bce08);
 	tmp |= 4 | 0x0004 << 16;
-	__raw_writel(tmp, (volatile unsigned int)0x480bce08);
+	__raw_writel(tmp, 0x480bce08);
 	//
-	tmp = __raw_readl((volatile unsigned int)0x480bce0c);
+	tmp = __raw_readl(0x480bce0c);
 	tmp |= 4 | 4 << 16;
-	__raw_writel(tmp, (volatile unsigned int)0x480bce0c);
+	__raw_writel(tmp, 0x480bce0c);
 
-	tmp = __raw_readl((volatile unsigned int)0x480bce28);
+	tmp = __raw_readl(0x480bce28);
 	tmp |= 1 | 1 << 2 | 1 << 4; 
-	__raw_writel(tmp, (volatile unsigned int)0x480bce28);
+	__raw_writel(tmp, 0x480bce28);
 
-	tmp = __raw_readl((volatile unsigned int)0x480bce04);
+	tmp = __raw_readl(0x480bce04);
 	tmp |= 3 << 11; 
-	__raw_writel(tmp, (volatile unsigned int)0x480bce04);
+	__raw_writel(tmp, 0x480bce04);
 
-	tmp = __raw_readl((volatile unsigned int)0x480bce34);
+	tmp = __raw_readl(0x480bce34);
 	tmp |= 2; 
-	__raw_writel(tmp, (volatile unsigned int)0x480bce34);
+	__raw_writel(tmp, 0x480bce34);
 
-	tmp = __raw_readl((volatile unsigned int)0x480bce38);
+	tmp = __raw_readl(0x480bce38);
 	tmp |= 0x20 | 0x20 << 8 | 0x20 << 16 | 0x20 << 24;
-	__raw_writel(tmp, (volatile unsigned int)0x480bce38);
+	__raw_writel(tmp, 0x480bce38);
 
-	tmp = __raw_readl((volatile unsigned int)0x480bce3c);
+	tmp = __raw_readl(0x480bce3c);
 	tmp |= 0 | 0x1 << 2 | 0x0 << 4 | 0x1 << 6 | 0x2 << 8 | 0x3 << 10 | 0x2 << 12 | 0x3 << 14 | 0x0 << 16 | 0x1 << 18 | 0x0 << 20 | 0x1 << 22 | 0x2 << 24 | 0x3 << 26 | 0x2 << 28 | 0x3 << 30; 
-	__raw_writel(tmp, (volatile unsigned int)0x480bce3c);
+	__raw_writel(tmp, 0x480bce3c);
 
-	tmp = __raw_readl((volatile unsigned int)0x480bce44);
+	tmp = __raw_readl(0x480bce44);
 	tmp |= 2 | 2 << 8 | 2 << 16; 
-	__raw_writel(tmp, (volatile unsigned int)0x480bce44);
+	__raw_writel(tmp, 0x480bce44);
 
 }
 
@@ -3802,24 +3779,30 @@ int init_sensor(int format,int type)
 #endif
 
 #if defined(CONFIG_3630KUNLUN_KL9C) || defined(CONFIG_3630KUNLUN_P2) || defined(CONFIG_3630PUMA_V1)
+
+#if 0
+#define     MUX_VAL(OFFSET,VALUE)\
+         __raw_writew((VALUE), OMAP34XX_CTRL_BASE + (OFFSET))
+	int val = 0;
+    MUX_VAL(CONTROL_PADCONF_I2C2_SDA, (EN  | PTD | DIS  | M4)) /*I2C2_SDA,Camera*/;
+	val = __raw_readw(OMAP34XX_CTRL_BASE + CONTROL_PADCONF_I2C2_SDA);
+printf("----------------I2C2_SDA reg:0x%x\n", val);
+#endif
     sensor_reset(type);
     if(type==_MAIN_SENSOR_)
     {
 /*8888888888888888888888888888888888888888888888888888888888888888888888888888888*/
-#if 1
 		reg.addr = 0x300a;
 		reg.data = 0x00;
-while (1) {
 		ov5640_read_reg(&reg);
 		
 		printf("Product HIGH id = %x\n",reg.data);
-}
 		reg.addr = 0x300b;
 		reg.data = 0x00;
+//while (1) 
 		ov5640_read_reg(&reg);
 		
 		printf("Product LOW id = %x\n",reg.data);
-#endif
 		ov5640_write_seq((struct camreg*)ov5640_preview_basic_cfg);
 printf("-------------------func:%s line:%d\n", __func__, __LINE__);
 /*8888888888888888888888888888888888888888888888888888888888888888888888888*/

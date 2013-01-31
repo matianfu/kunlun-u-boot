@@ -219,8 +219,8 @@
 	MUX_VAL(CP(I2C1_SDA),       (IEN  | PTU | EN  | M0)) /*I2C1_SDA, TWL5030*/\
 /*	MUX_VAL(CP(I2C2_SCL),       (IEN  | PTU | DIS | M0))*/ /*I2C2_SCL,Camera*/\
 /*	MUX_VAL(CP(I2C2_SDA),       (IEN  | PTU | DIS | M0))*/ /*I2C2_SDA,Camera*/\
-	MUX_VAL(CP(I2C2_SCL),       (IEN  | PTU | DIS | M4)) /*I2C2_SCL,Camera*/\
-	MUX_VAL(CP(I2C2_SDA),       (IEN  | PTU | DIS | M4)) /*I2C2_SDA,Camera*/\
+	MUX_VAL(CP(I2C2_SCL),       (IEN  | PTD | DIS | M4)) /*I2C2_SCL,Camera*/\
+	MUX_VAL(CP(I2C2_SDA),       (EN   | PTD | DIS | M4)) /*I2C2_SDA,Camera*/\
 	MUX_VAL(CP(I2C3_SCL),       (IEN  | PTU | EN  | M0)) /*I2C3_SCL,accelerator*/\
 	MUX_VAL(CP(I2C3_SDA),       (IEN  | PTU | EN  | M0)) /*I2C3_SDA,accelerator*/\
 	MUX_VAL(CP(I2C4_SCL),       (IEN  | PTU | EN  | M0)) /*I2C4_SCL, TWL5030*/\
