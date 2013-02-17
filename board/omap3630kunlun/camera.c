@@ -3990,7 +3990,8 @@ printf("-----------------------------%s %d\n", __func__, __LINE__);
 	printf("PHY reset completed correctly\n");	
 	//2, MSTANDBY_MOD bit
 	tmp = __raw_readl(0x480bd810);	//read CSI2_SYSCONFIG
-	tmp |= 1 << 1 | 0x2 << 12;
+	tmp |= 0x1 << 12;				//for test temporarily
+//	tmp |= 1 << 1 | 0x2 << 12;
 	__raw_writel(tmp, 0x480bd810);
 	//3, configure CSI2_IRQENABLE
 	tmp = __raw_readl(0x480bd81c);	
@@ -3998,11 +3999,12 @@ printf("-----------------------------%s %d\n", __func__, __LINE__);
 	__raw_writel(tmp, 0x480bd81c);
 	//4, configure the PHY interrupt generation CSI2_COMPLEXIO1_IRQENABLE
 	tmp = __raw_readl(0x480bd860);	
+//	tmp |= 0x000fffff;			//for test temporarily
 	tmp |= 0x07ffffff;
 	__raw_writel(tmp, 0x480bd860);
 	//5, start PHY: set CSI2_COMPLEXIO_CFG
 	tmp = __raw_readl(0x480bd850);
-//	tmp |= (0x1 << 27 | 0 << 28);
+//	tmp |= (0x1 << 27 | 0 << 28);	//for test temporarily
 	tmp |= (0x1 << 27 | 0x2 << 8 | 0x1 << 4 | 0x3);
 	__raw_writel(tmp, 0x480bd850);
 
@@ -4615,7 +4617,7 @@ printf("-----------------enable\n");
                 sensor_reset(_MAIN_SENSOR_);
             #endif
 
-//            init_sensor(OUTPUT_YUV422,_MAIN_SENSOR_);	//move here by myself;
+            init_sensor(OUTPUT_YUV422,_MAIN_SENSOR_);	//move here by myself;
 
 /***********************************/
 dump_cam_reg();
@@ -4623,7 +4625,7 @@ dump_cam_reg();
 
             init_isp(OUTPUT_YUV422);
 printf("----------------before init_sensor\n");
-            init_sensor(OUTPUT_YUV422,_MAIN_SENSOR_);
+//            init_sensor(OUTPUT_YUV422,_MAIN_SENSOR_);
         }
 
 
