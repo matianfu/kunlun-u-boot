@@ -2530,12 +2530,15 @@ const static struct camreg ov5640_preview_basic_cfg[]={
 
 const static struct camreg ov5640_preview_basic_cfg[]={
 	//24Mhz Mclk ,56MHz Pclk, 15fps
+#if 0
 {0x3103, 0x11}, // SCCB system control
 {0x3008, 0x82}, // software reset
 {0x3008, 0x42}, // software power down
 {0x3103, 0x03}, // SCCB system control
-{0x3017, 0xff}, // set Frex, Vsync, Href, PCLK, D[9:6] input
-{0x3018, 0xff}, // set d[5:0], GPIO[1:0] input
+/*{0x3017, 0xff},*/ // set Frex, Vsync, Href, PCLK, D[9:6] input
+{0x3017, 0x00}, // set Frex, Vsync, Href, PCLK, D[9:6] input
+/*{0x3018, 0xff},*/ // set d[5:0], GPIO[1:0] input
+{0x3018, 0x00}, // set d[5:0], GPIO[1:0] input
 {0x3034, 0x18}, // MIPI 8-bit mode
 {0x3037, 0x13}, // PLL
 {0x3108, 0x01}, // system divider
@@ -2741,7 +2744,526 @@ const static struct camreg ov5640_preview_basic_cfg[]={
 
 		//chg-e for zte objective test 2012.05.30
 {0x3008, 0x02}, // wake up
-{0xffff, 0xff}
+#endif
+#if 0
+{0x3103, 0x11},  
+{0x3008, 0x82},
+{0x3008, 0x42},
+{0x3103, 0x03},
+{0x3017, 0x00},
+{0x3018, 0x00},
+{0x3034, 0x18},
+{0x3035, 0x11},
+{0x3036, 0x54},
+{0x3037, 0x13},
+{0x3108, 0x01},
+{0x3630, 0x36},
+{0x3631, 0x0e},
+{0x3632, 0xe2},
+{0x3633, 0x12},
+{0x3621, 0xe0},
+{0x3704, 0xa0},
+{0x3703, 0x5a},
+{0x3715, 0x78},
+{0x3717, 0x01},
+{0x370b, 0x60},
+{0x3705, 0x1a},
+{0x3905, 0x02},
+{0x3906, 0x10},
+{0x3901, 0x0a},
+{0x3731, 0x12},
+{0x3600, 0x08},
+{0x3601, 0x33},
+{0x302d, 0x60},
+{0x3620, 0x52},
+{0x371b, 0x20},
+{0x471c, 0x50},
+{0x3a13, 0x43},
+{0x3a18, 0x00},
+{0x3a19, 0xf8},
+{0x3635, 0x13},
+{0x3636, 0x03},
+{0x3634, 0x40},
+{0x3622, 0x01},
+{0x3c01, 0x34},
+{0x3c04, 0x28},
+{0x3c05, 0x98},
+{0x3c06, 0x00},
+{0x3c07, 0x07},
+{0x3c08, 0x00},
+{0x3c09, 0x1c},
+{0x3c0a, 0x9c},
+{0x3c0b, 0x40},
+{0x3820, 0x40},
+{0x3821, 0x06},
+{0x3814, 0x11},
+{0x3815, 0x11},
+{0x3800, 0x00},
+{0x3801, 0x00},
+{0x3802, 0x00},
+{0x3803, 0x00},
+{0x3804, 0x0a},
+{0x3805, 0x3f},
+{0x3806, 0x07},
+{0x3807, 0x9f},
+{0x3808, 0x0a},
+{0x3809, 0x20},
+{0x380a, 0x07},
+{0x380b, 0x98},
+{0x380c, 0x0b},
+{0x380d, 0x1c},
+{0x380e, 0x07},
+{0x380f, 0xb0},
+{0x3810, 0x00},
+{0x3811, 0x10},
+{0x3812, 0x00},
+{0x3813, 0x04},
+{0x3618, 0x04},
+{0x3612, 0x2b},
+{0x3708, 0x64},
+{0x3709, 0x12},
+{0x370c, 0x00},
+{0x3a02, 0x07},
+{0x3a03, 0xb0},
+{0x3a08, 0x01},
+{0x3a09, 0x27},
+{0x3a0a, 0x00},
+{0x3a0b, 0xf6},
+{0x3a0e, 0x06},
+{0x3a0d, 0x08},
+{0x3a14, 0x07},
+{0x3a15, 0xb0},
+{0x4001, 0x02},
+{0x4004, 0x06},
+{0x3000, 0x00},
+{0x3002, 0x1c},
+{0x3004, 0xff},
+{0x3006, 0xc3},
+{0x300e, 0x45},
+{0x302e, 0x08},
+{0x4300, 0x30},
+{0x4837, 0x0a},
+{0x501f, 0x00},
+{0x440e, 0x00},
+{0x5000, 0xa7},
+{0x5001, 0x83},
+{0x5180, 0xff},
+{0x5181, 0xf2},
+{0x5182, 0x00},
+{0x5183, 0x14},
+{0x5184, 0x25},
+{0x5185, 0x24},
+{0x5186, 0x09},
+{0x5187, 0x09},
+{0x5188, 0x09},
+{0x5189, 0x75},
+{0x518a, 0x54},
+{0x518b, 0xe0},
+{0x518c, 0xb2},
+{0x518d, 0x42},
+{0x518e, 0x3d},
+{0x518f, 0x56},
+{0x5190, 0x46},
+{0x5191, 0xf8},
+{0x5192, 0x04},
+{0x5193, 0x70},
+{0x5194, 0xf0},
+{0x5195, 0xf0},
+{0x5196, 0x03},
+{0x5197, 0x01},
+{0x5198, 0x04},
+{0x5199, 0x12},
+{0x519a, 0x04},
+{0x519b, 0x00},
+{0x519c, 0x06},
+{0x519d, 0x82},
+{0x519e, 0x38},
+{0x5381, 0x1e},
+{0x5382, 0x5b},
+{0x5383, 0x08},
+{0x5384, 0x0a},
+{0x5385, 0x7e},
+{0x5386, 0x88},
+{0x5387, 0x7c},
+{0x5388, 0x6c},
+{0x5389, 0x10},
+{0x538a, 0x01},
+{0x538b, 0x98},
+{0x5300, 0x08},
+{0x5301, 0x30},
+{0x5302, 0x10},
+{0x5303, 0x00},
+{0x5304, 0x08},
+{0x5306, 0x08},
+{0x5307, 0x16},
+{0x5309, 0x08},
+{0x530a, 0x30},
+{0x530b, 0x04},
+{0x530c, 0x06},
+{0x5480, 0x01},
+{0x5481, 0x08},
+{0x5482, 0x14},
+{0x5483, 0x28},
+{0x5484, 0x51},
+{0x5485, 0x65},
+{0x5486, 0x71},
+{0x5487, 0x7d},
+{0x5488, 0x87},
+{0x5489, 0x91},
+{0x548a, 0x9a},
+{0x548b, 0xaa},
+{0x548c, 0xb8},
+{0x548d, 0xcd},
+{0x548e, 0xdd},
+{0x548f, 0xea},
+{0x5490, 0x1d},
+{0x5580, 0x02},
+{0x5583, 0x40},
+{0x5584, 0x10},
+{0x5589, 0x10},
+{0x558a, 0x00},
+{0x558b, 0xf8},
+{0x5800, 0x23},
+{0x5801, 0x14},
+{0x5802, 0x0f},
+{0x5803, 0x0f},
+{0x5804, 0x12},
+{0x5805, 0x26},
+{0x5806, 0x0c},
+{0x5807, 0x08},
+{0x5808, 0x05},
+{0x5809, 0x05},
+{0x580a, 0x08},
+{0x580b, 0x0d},
+{0x580c, 0x08},
+{0x580d, 0x03},
+{0x580e, 0x00},
+{0x580f, 0x00},
+{0x5810, 0x03},
+{0x5811, 0x09},
+{0x5812, 0x07},
+{0x5813, 0x03},
+{0x5814, 0x00},
+{0x5815, 0x01},
+{0x5816, 0x03},
+{0x5817, 0x08},
+{0x5818, 0x0d},
+{0x5819, 0x08},
+{0x581a, 0x05},
+{0x581b, 0x06},
+{0x581c, 0x08},
+{0x581d, 0x0e},
+{0x581e, 0x29},
+{0x581f, 0x17},
+{0x5820, 0x11},
+{0x5821, 0x11},
+{0x5822, 0x15},
+{0x5823, 0x28},
+{0x5824, 0x46},
+{0x5825, 0x26},
+{0x5826, 0x08},
+{0x5827, 0x26},
+{0x5828, 0x64},
+{0x5829, 0x26},
+{0x582a, 0x24},
+{0x582b, 0x22},
+{0x582c, 0x24},
+{0x582d, 0x24},
+{0x582e, 0x06},
+{0x582f, 0x22},
+{0x5830, 0x40},
+{0x5831, 0x42},
+{0x5832, 0x24},
+{0x5833, 0x26},
+{0x5834, 0x24},
+{0x5835, 0x22},
+{0x5836, 0x22},
+{0x5837, 0x26},
+{0x5838, 0x44},
+{0x5839, 0x24},
+{0x583a, 0x26},
+{0x583b, 0x28},
+{0x583c, 0x42},
+{0x583d, 0xce},
+{0x5025, 0x00},
+{0x3a0f, 0x30},
+{0x3a10, 0x28},
+{0x3a1b, 0x30},
+{0x3a1e, 0x26},
+{0x3a11, 0x60},
+{0x3a1f, 0x14},
+{0x3008, 0x02},
+#endif
+		{0x3103, 0x11}, // SCCB system control
+
+		{0x3008, 0x82}, // software reset
+		{0x3008, 0x42}, // software power down
+		{0x3103, 0x03}, // SCCB system control
+		{0x3017, 0x00}, // set Frex, Vsync, Href, PCLK, D[9:6] input
+		{0x3018, 0x00}, // set d[5:0], GPIO[1:0] input
+		{0x3034, 0x18}, // MIPI 8-bit mode
+		{0x3037, 0x13}, // PLL
+		{0x3035, 0x11}, // PLL
+		{0x3036, 0x46}, // PLL
+		{0x3108, 0x01}, // system divider
+		{0x3630, 0x36},
+		{0x3631, 0x0e},
+		{0x3632, 0xe2},
+		{0x3633, 0x12},
+		{0x3621, 0xe0},
+		{0x3704, 0xa0},
+		{0x3703, 0x5a},
+		{0x3715, 0x78},
+		{0x3717, 0x01},
+		{0x370b, 0x60},
+		{0x3705, 0x1a},
+
+		{0x3905, 0x02},
+		{0x3906, 0x10},
+		{0x3901, 0x0a},
+		{0x3731, 0x12},
+		{0x3600, 0x08}, // VCM debug mode
+		{0x3601, 0x33}, // VCM debug mode
+		{0x302d, 0x60}, // system control
+		{0x3620, 0x52},
+		{0x371b, 0x20},
+		{0x471c, 0x50},
+		{0x3a13, 0x43}, // AGC pre-gain, 0x40 = 1x
+		{0x3a18, 0x00}, // gain ceiling
+		{0x3a19, 0xf8}, // gain ceiling
+		{0x3635, 0x13},
+		{0x3636, 0x03},
+		{0x3634, 0x40},
+		{0x3622, 0x01},
+		// 50Hz/60Hz 5,0/60Hz 灯光条纹过滤
+		{0x3c01, 0x34}, // 50/60Hz
+		{0x3c04, 0x28}, // threshold for low sum
+		{0x3c05, 0x98}, // threshold for high sum
+		{0x3c06, 0x00}, // light meter 1 threshold high
+		{0x3c08, 0x00}, // light meter 2 threshold high
+		{0x3c09, 0x1c}, // light meter 2 threshold low
+		{0x3c0a, 0x9c}, // sample number high
+		{0x3c0b, 0x40}, // sample number low
+
+		// timing 时序,
+		{0x3800, 0x00}, // HS
+		{0x3801, 0x00}, // HS
+		{0x3802, 0x00}, // VS
+		{0x3804, 0x0a}, // HW
+		{0x3805, 0x3f}, // HW
+		{0x3810, 0x00}, // H offset high
+		{0x3811, 0x10}, // H offset low
+		{0x3812, 0x00}, // V offset high
+		{0x3708, 0x64},
+		{0x3a08, 0x01}, // B50
+		{0x4001, 0x02}, // BLC start line
+		{0x4005, 0x1a}, // BLC always update
+		{0x3000, 0x00}, // system reset 0
+		{0x3002, 0x1c}, // system reset 2
+		{0x3004, 0xff}, // clock enable 00
+		{0x3006, 0xc3}, // clock enable 2
+		{0x300e, 0x25}, // MIPI control, 1 lane, MIPI enable
+		{0x302e, 0x08},
+		{0x4300, 0x30}, // YUV 422, YUYV
+
+		{0x501f, 0x00}, // ISP YUV 422
+		{0x4407, 0x04}, // JPEG QS
+		{0x440e, 0x00},
+		{0x5000, 0xa7}, // ISP control, Lenc on, gamma on, BPC on, WPC on, CIP on
+
+		 // UV adjust ,UV?<B2>?<A5><BA><U+0376>?<F7><D5><FB>
+		{0x5580, 0x06}, // sat on, contrast on
+		{0x5583, 0x40}, // sat U
+		{0x5584, 0x10}, // sat V
+		{0x5589, 0x10}, // UV adjust th1
+		{0x558a, 0x00}, // UV adjust th2[8]
+		{0x558b, 0xf8}, // UV adjust th2[7:0]
+		{0x501d, 0x04}, // enable manual offset of contrast
+		
+
+		//chg-s for zte objective test 2012.05.30
+		//reviewed by yuan
+		//TL84 LENC setting
+
+		 {0x5800, 0x3b},    
+		 {0x5801, 0x1c},    
+		 {0x5802, 0x17},    
+		 {0x5803, 0x18},    
+		 {0x5804, 0x1c},    
+		 {0x5805, 0x3f},    
+		 {0x5806, 0x11},    
+		 {0x5807, 0xb },    
+		 {0x5808, 0x8 },    
+		 {0x5809, 0x8 },    
+		 {0x580a, 0xc },    
+		 {0x580b, 0x12},    
+		 {0x580c, 0xb },    
+		 {0x580d, 0x3 },    
+		 {0x580e, 0x0 },    
+		 {0x580f, 0x0 },    
+		 {0x5810, 0x4 },    
+		 {0x5811, 0xe },    
+		 {0x5812, 0xb },    
+		 {0x5813, 0x3 },    
+		 {0x5814, 0x0 },    
+		 {0x5815, 0x0 },    
+		 {0x5816, 0x4 },    
+		 {0x5817, 0xd },    
+		 {0x5818, 0xf },    
+		 {0x5819, 0x9 },    
+		 {0x581a, 0x5 },    
+		 {0x581b, 0x6 },    
+		 {0x581c, 0xa },    
+		 {0x581d, 0x12},    
+		 {0x581e, 0x32},    
+		 {0x581f, 0x1a},    
+		 {0x5820, 0x15},    
+		 {0x5821, 0x15},    
+		 {0x5822, 0x1b},    
+		 {0x5823, 0x36},    
+		 {0x5824, 0x64},    
+		 {0x5825, 0x26},    
+		 {0x5826, 0x6 },    
+		 {0x5827, 0x26},    
+		 {0x5828, 0x84},    
+		 {0x5829, 0x46},    
+		 {0x582a, 0x64},    
+		 {0x582b, 0x62},    
+		 {0x582c, 0x44},    
+		 {0x582d, 0x46},    
+		 {0x582e, 0x24},    
+		 {0x582f, 0x62},    
+		 {0x5830, 0x60},    
+		 {0x5831, 0x62},    
+		 {0x5832, 0x24},    
+		 {0x5833, 0x26},    
+		 {0x5834, 0x64},    
+		 {0x5835, 0x64},    
+		 {0x5836, 0x44},    
+		 {0x5837, 0x46},    
+		 {0x5838, 0x64},    
+		 {0x5839, 0x48},    
+		 {0x583a, 0x28},    
+		 {0x583b, 0x48},    
+		 {0x583c, 0x86},    
+		 {0x583d, 0xae},    
+
+		 {0x5180, 0xff},    //  ;awb
+		 {0x5181, 0xf2},    
+		 {0x5182, 0x0 },    
+		 {0x5183, 0x14},    
+		 {0x5184, 0x25},    
+		 {0x5185, 0x24},    
+		 {0x5186, 0xc },    
+		 {0x5187, 0x2e},    
+		 {0x5188, 0xf },    
+		 {0x5189, 0x75},    
+		 {0x518a, 0x56},    
+		 {0x518b, 0xfa},    
+		 {0x518c, 0xbb},    
+		 {0x518d, 0x42},    
+		 {0x518e, 0x3b},    
+		 {0x518f, 0x56},    
+		 {0x5190, 0x48},    
+		 {0x5191, 0xf8},    
+		 {0x5192, 0x4 },    
+		 {0x5193, 0x70},    
+		 {0x5194, 0xf0},    
+		 {0x5195, 0xf0},    
+		 {0x5196, 0x3 },    
+		 {0x5197, 0x1 },    
+		 {0x5198, 0x6 },    
+		 {0x5199, 0x7a},    
+		 {0x519a, 0x4 },    
+		 {0x519b, 0x0 },    
+		 {0x519c, 0x4 },    
+		 {0x519d, 0xb7},     
+		 {0x519e, 0x38},     
+
+		 {0x5381, 0x1c},    // ;cmx
+		 {0x5382, 0x5a},  
+		 {0x5383, 0x6 }, 
+		 {0x5384, 0x8 }, 
+		 {0x5385, 0x6f},    // ;6a 
+		 {0x5386, 0x78},    // ;72 
+		 {0x5387, 0x6d},    // ;68 
+		 {0x5388, 0x5e},    // ;5a 
+		 {0x5389, 0xf },    // ;e 
+		 {0x538b, 0x98}, 
+		 {0x538a, 0x1 }, 
+
+		 {0x5490, 0x25},    // ;gamma  
+		 {0x5481, 0x6 },   
+		 {0x5482, 0xd },   
+		 {0x5483, 0x1e},   
+		 {0x5484, 0x45},   
+
+		 {0x5485, 0x58},   
+		 {0x5486, 0x63},   
+		 {0x5487, 0x6f},   
+		 {0x5488, 0x79},   
+		 {0x5489, 0x84},   
+		 {0x548a, 0x8f},   
+		 {0x548b, 0xa1},   
+		 {0x548c, 0xb0},   
+		 {0x548d, 0xc5},   
+		 {0x548e, 0xd5},   
+		 {0x548f, 0xe4},   
+
+		 {0x3a0f, 0x2c},    // ;AE target
+		 {0x3a10, 0x24},  
+		 {0x3a11, 0x51},  
+		 {0x3a1b, 0x2c},  
+		 {0x3a1e, 0x24},  
+		 {0x3a1f, 0x10},  
+
+
+		{0x3108, 0x01}, // system divider
+		{0x3035, 0x11}, ///21   //chg by hanwei for effect optimization 20120410
+		{0x3036, 0x46},
+		{0x3c07, 0x08}, // light meter 1 threshold
+		{0x3820, 0x47},	//0x41);  filp
+		{0x3821, 0x01},	//0x07);
+		{0x3503, 0x00}, //add by ron 
+
+		// timing 时序
+		{0x3814, 0x31}, // X inc
+		{0x3815, 0x31}, // Y inc
+		{0x3803, 0x04}, // VS
+		{0x3806, 0x07}, // VH
+		{0x3807, 0x9b}, // VH
+
+		{0x3808, 0x02}, // DVPHO //640//1024
+		{0x3809, 0x80}, // DVPHO
+		{0x380a, 0x01}, // DVPVO //480//768
+		{0x380b, 0xe0}, // DVPVO
+		{0x380c, 0x07}, // HTS
+		{0x380d, 0x68}, // HTS
+		{0x380e, 0x05}, // VTS //05c0 //1472 Ron chg for bug#10770 preview once in a while dark screen 20120418
+		{0x380f, 0xc0}, // VTS Ron chg for bug#10770 preview once in a while dark screen 20120418
+		{0x3813, 0x06}, // V offset
+		{0x3618, 0x00},
+
+		{0x3612, 0x29},
+		{0x3709, 0x52},
+		{0x370c, 0x03},
+
+		{0x3a08, 0x00}, // B50 h
+		{0x3a09, 0xb8}, // B50 low //5c Ron chg for bug#10770 preview once in a while dark screen 20120418
+		{0x3a0a, 0x00}, // B60 high
+		{0x3a0b, 0xf6}, // B60 low
+		{0x3a0e, 0x03}, // B50 max
+		{0x3a0d, 0x04}, // B60 max
+		{0x4004, 0x02}, // BLC line number
+		{0x4713, 0x03}, // JPEG mode 3
+		{0x460b, 0x35}, // debug
+		{0x460c, 0x22}, // VFIFO, PCLK manual
+		{0x4837, 0x44}, // MIPI global timing
+		{0x3824, 0x02}, // PCLK divider
+		{0x5001, 0xa3}, // SDE on, scale on, UV average off, CMX on, AWB on
+		{0x3008, 0x02}, // wake up
+
+		{0xffff, 0xff}
 };
 /***************************************************************************/
 
@@ -3257,20 +3779,22 @@ static void sensor_poweron(int type)
 	DEBUG_INFO("VAUX4 output is expected to 2.8v\n");	
 
 }
-/*888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888*/
+/*88888888888888888888888888888888888888888888888888888888888888888888888888*/
 
 /*enable isp clocks for ov2655*/
 static void sensor_enable_clocks(int type)
 {
 #if defined(CONFIG_3630KUNLUN_KL9C) || defined(CONFIG_3630KUNLUN_P2) || defined(CONFIG_3630PUMA_V1)
+	int val = 0;
+
     /*enable GPIO 4 function clock*/
     sr32(0x48005000,15,1,1);
     /*enable GPIO 4 interface clock*/
     sr32(0x48005010,15,1,1);
 
-    /*enable GPIO 4 function clock*/
+    /*enable GPIO 6 function clock*/
     sr32(0x48005000,17,1,1);
-    /*enable GPIO 4 interface clock*/
+    /*enable GPIO 6 interface clock*/
     sr32(0x48005010,17,1,1);
 
     if(type==_MAIN_SENSOR_){
@@ -3309,8 +3833,13 @@ static void sensor_enable_clocks(int type)
     __raw_writel(0x1 << 0,0x48004F10); //CM_ICLKEN_CAM,PAGE 530
 
     if(type==_MAIN_SENSOR_){
-
-        __raw_writel(0x9 << 0,0x480bc050); /*2400000 24MHZ MCLK,XCLKA,TCTRL_CTRL PAGE 1446*/
+/**************************************/
+//modified by myself
+		val = __raw_readl(0x480bc050);
+		val |= 0x9 << 0;
+        __raw_writel(val,0x480bc050); /*2400000 24MHZ MCLK,XCLKA,TCTRL_CTRL PAGE 1446*/
+/**************************************/
+//        __raw_writel(0x9 << 0,0x480bc050); /*2400000 24MHZ MCLK,XCLKA,TCTRL_CTRL PAGE 1446*/
     }else{
         __raw_writel(0x9 << 5,0x480bc050); /*2400000 24MHZ MCLK,XCLKA&XCLKB,TCTRL_CTRL PAGE 1446*/
     }
@@ -3325,9 +3854,9 @@ static void sensor_enable_clocks(int type)
     /*enable GPIO 4 interface clock*/
     sr32(0x48005010,15,1,1);
 
-    /*enable GPIO 4 function clock*/
+    /*enable GPIO 6 function clock*/
     sr32(0x48005000,17,1,1);
-    /*enable GPIO 4 interface clock*/
+    /*enable GPIO 6 interface clock*/
     sr32(0x48005010,17,1,1);
 
     if(type==_MAIN_SENSOR_){
@@ -3399,7 +3928,7 @@ void init_isp(int format)
 {
 printf("-----------------------------first line of init_isp\n");
 	unsigned int tmp = 0;
-/*********************************************************************************/
+/*******************************************************************************/
 	//CAM module clock selection 0x4 divisor
 	tmp = __raw_readl(0x48004f40);
 	tmp |= 0x4;
@@ -3414,14 +3943,21 @@ printf("-----------------------------first line of init_isp\n");
 	tmp = __raw_readl(0x48004f10);
 	tmp |= 0x1;
 	__raw_writel(tmp, 0x48004f10);
-//access to a CSI2 receiver register;
-__raw_readl(0x480bd814);//read CSI2_SYSSTATUS
+
 	//reset CSI2 Receiver;
 	tmp = __raw_readl(0x480bd810);	//read CSI2_SYSCONFIG
 	tmp |= 0x1 << 1;
 	__raw_writel(tmp, 0x480bd810);
 
+/*******************************************************/
+#if 0
+	tmp = __raw_readl(0x480bd814);//read CSI2_SYSSTATUS
+	printf("----------csi2_sysstatus:%x\n", tmp);
+#endif
+/*******************************************************/
+
 /*---------------------------------------*/
+//for isp csi2 receiver global reset begin
 tmp = __raw_readl(0x480bd850);
 tmp |= 1 << 30;
 __raw_writel(tmp, 0x480bd850);
@@ -3440,7 +3976,6 @@ __raw_writel(tmp, 0x480bd850);
 		break;
 	}
 
-
 printf("-----------------------------%s %d\n", __func__, __LINE__);
 	//1, CSI2_PHY_CFG.RESET_DONE	
 	cnt = 0;
@@ -3455,7 +3990,7 @@ printf("-----------------------------%s %d\n", __func__, __LINE__);
 	printf("PHY reset completed correctly\n");	
 	//2, MSTANDBY_MOD bit
 	tmp = __raw_readl(0x480bd810);	//read CSI2_SYSCONFIG
-	tmp |= 0x1 << 12;
+	tmp |= 1 << 1 | 0x2 << 12;
 	__raw_writel(tmp, 0x480bd810);
 	//3, configure CSI2_IRQENABLE
 	tmp = __raw_readl(0x480bd81c);	
@@ -3463,11 +3998,12 @@ printf("-----------------------------%s %d\n", __func__, __LINE__);
 	__raw_writel(tmp, 0x480bd81c);
 	//4, configure the PHY interrupt generation CSI2_COMPLEXIO1_IRQENABLE
 	tmp = __raw_readl(0x480bd860);	
-	tmp |= 0x000fffff;
+	tmp |= 0x07ffffff;
 	__raw_writel(tmp, 0x480bd860);
 	//5, start PHY: set CSI2_COMPLEXIO_CFG
 	tmp = __raw_readl(0x480bd850);
-	tmp |= (0x1 << 27 | 0 << 28);
+//	tmp |= (0x1 << 27 | 0 << 28);
+	tmp |= (0x1 << 27 | 0x2 << 8 | 0x1 << 4 | 0x3);
 	__raw_writel(tmp, 0x480bd850);
 
 	udelay(100);
@@ -3477,11 +4013,12 @@ printf("-----------------------------%s %d\n", __func__, __LINE__);
 		tmp = __raw_readl(0x480bd850);
 		printf("PHY state 0x%x\n", tmp);
 	}	while (!((tmp & 0x02000000) && !(tmp & 0x04000000))); 
+printf("------------start PHY successful\n");
 	//6, configure the PHY reset value;
-#if 0
-	tmp = __raw_readl(()0x);
-	tmp |= 
-	__raw_writel(tmp, ()0x);
+#if 1
+	tmp = __raw_readl(0x480bd970);
+	tmp |= (16 |  1 << 8);
+	__raw_writel(tmp, 0x480bd970);
 #endif	
 	//7, set CSI2_TIMING[15]
 	tmp = __raw_readl(0x480bd86c);
@@ -3489,37 +4026,53 @@ printf("-----------------------------%s %d\n", __func__, __LINE__);
 	__raw_writel(tmp, 0x480bd86c);
 	//8, set CSI2_CRTL[2] ECC_EN
 	tmp = __raw_readl(0x480bd840);
-	tmp |= 0x1 << 2; 
+//	tmp |= 0x1 << 2; 
+	tmp |= 1 << 2 | 1 << 8 | 1 << 15; 
 	__raw_writel(tmp, 0x480bd840);
 	//9, start CSI2 receiver by setting CSI2_CRTL[0]
 	tmp = __raw_readl(0x480BD840);
 	tmp |= 0x1; 
 	__raw_writel(tmp, 0x480BD840);
-	//10, 	CSI2_CTx_CTRL2  YUV422 10bit,  
+	//10, 	CSI2_CTx_CTRL2  YUV422 8bit 
 	tmp = __raw_readl((0x480bd874 + 0x20 * 0));
-	tmp |= 0x1f; 
+	tmp |= 0x1e; 
 	__raw_writel(tmp, (0x480bd874 + 0x20 * 0));
 	//CSI2_CTx_CTRL1[26:23] FEC_NUMBER bit field to 0x1 for a progressive video, not 0x2 for an interlaced viedo;	capture an infinite number of frames; enable the crc
 	tmp = __raw_readl((0x480bd870 + 0x20 * 0));
-	tmp |= (0x1 << 26 | 0 << 8 | 0 << 9 | 0 << 10 | 0 << 11 | 0 << 12 | 0 << 13 << 0<<14 | 0 << 15| 0 << 4 | 1 << 5); 
+	tmp |= (1 << 26 | 1 << 23 | 1 << 5 | 0xf); 
 	__raw_writel(tmp, (0x480bd870 + 0x20 * 0));
 	//configure the DMA engine for the current channel;				????????????????
 	unsigned int dma;
-	dma = malloc(sizeof(800 * 600 * 10 / 8));
-	tmp = __raw_readl((0x480bd87c + 0x20 * 0));
-	tmp |= dma << 5;
+	dma = malloc(sizeof(800 * 600 * 2));
+//	tmp = __raw_readl((0x480bd87c + 0x20 * 0));
+	tmp = dma & 0xffffffe0;
 	__raw_writel(tmp, (0x480bd87c + 0x20 * 0));
 
-	tmp = __raw_readl((0x480bd880 + 0x20 * 0));
-	tmp |= dma << 5;
+//	tmp = __raw_readl((0x480bd880 + 0x20 * 0));
+//	tmp = dma & 0xffffffe0;
 	__raw_writel(tmp, (0x480bd880 + 0x20 * 0));	
 
+//csi2_ctx_dat_ofst
+//	tmp = __raw_readl((0x480bd878 + 0x20 * 0));
+	tmp = 0;
+	__raw_writel(tmp, (0x480bd878 + 0x20 * 0));
+	//csi2_ctx_ctrl3[29:16]
+	__raw_writel(tmp, 0x480bd88c);
+	
+//11, enable the contexts
+	tmp = __raw_readl((0x480bd870 + 0x20 * 0));
+	tmp |= 0x1; 
+	__raw_writel(tmp, (0x480bd870 + 0x20 * 0));
+
+
+/*******************************************************************************/
+
 	tmp = __raw_readl((0x480bd88c + 0x20 * 0));
-	tmp |= 0x0000 << 16;
+	tmp |= 0x000 << 16;
 	__raw_writel(tmp, (0x480bd88c + 0x20 * 0));
 	// divisor of Mclk
 	tmp = __raw_readl(0x480bc050);
-	tmp |= (0x4 | 1 << 21 | 1 << 22 | 1 << 23 | 1 << 29 | 1 << 27 | 0 << 28 | 1 << 31 | 1 << 24 | 1 << 26 | 1 << 30 | 0x004 << 10);
+	tmp |= (0x9 | 1 << 21 | 1 << 22 | 1 << 23 | 1 << 29 | 1 << 27 | 0 << 28 | 1 << 31 | 1 << 24 | 1 << 26 | 1 << 30 | 0x004 << 10);
 	__raw_writel(tmp, 0x480bc050);
 	//TCTRL_SHUT_DELAY	
 	tmp = __raw_readl(0x480bc060);
@@ -3564,10 +4117,6 @@ printf("-----------------------------CSI2A receiver inited\n");
     while((__raw_readl(ISP_SYSSTATUS) & 0x1) == 0)
         udelay(1000);
     DEBUG_INFO("ISP reset done\r\n");
-/***************************/
-printf("--------------csi2_irqstat:%x\n", __raw_readl(0x480bd818));
-/***************************/
-
 
 #if defined(SENSOR_OUTPUT_SVGA)
     isp_des_obj.ccdc_in_width = 800;
@@ -3779,19 +4328,10 @@ int init_sensor(int format,int type)
 #endif
 
 #if defined(CONFIG_3630KUNLUN_KL9C) || defined(CONFIG_3630KUNLUN_P2) || defined(CONFIG_3630PUMA_V1)
-
-#if 0
-#define     MUX_VAL(OFFSET,VALUE)\
-         __raw_writew((VALUE), OMAP34XX_CTRL_BASE + (OFFSET))
-	int val = 0;
-    MUX_VAL(CONTROL_PADCONF_I2C2_SDA, (EN  | PTD | DIS  | M4)) /*I2C2_SDA,Camera*/;
-	val = __raw_readw(OMAP34XX_CTRL_BASE + CONTROL_PADCONF_I2C2_SDA);
-printf("----------------I2C2_SDA reg:0x%x\n", val);
-#endif
     sensor_reset(type);
     if(type==_MAIN_SENSOR_)
     {
-/*8888888888888888888888888888888888888888888888888888888888888888888888888888888*/
+/*8888888888888888888888888888888888888888888888888888888888888888888888888*/
 		reg.addr = 0x300a;
 		reg.data = 0x00;
 		ov5640_read_reg(&reg);
@@ -3804,6 +4344,14 @@ printf("----------------I2C2_SDA reg:0x%x\n", val);
 		
 		printf("Product LOW id = %x\n",reg.data);
 		ov5640_write_seq((struct camreg*)ov5640_preview_basic_cfg);
+/******************/
+#if 0
+//for test reg:4202 default value. the default is 0x00;
+reg.addr = 0x4202;
+reg.data = 0x0f;
+ov5640_write_reg(&reg);
+#endif
+/******************/
 printf("-------------------func:%s line:%d\n", __func__, __LINE__);
 /*8888888888888888888888888888888888888888888888888888888888888888888888888*/
     } 
@@ -3982,6 +4530,41 @@ static inline void ispccdc_enable(void)
     __raw_writel(0x1 << 0,CCDC_PCR);
 }
 
+/*********************************************/
+struct dump_reg1
+{
+    unsigned int base;
+    unsigned int offset;
+    unsigned int end;
+    char * in_module;
+} reg;
+
+static void xxxx_dump(struct dump_reg1 *reg)
+{
+    int i = 0, tmp = 0;
+
+    for (i = reg->base; i < reg->end; i = i + reg->offset) {
+        tmp = __raw_readl(i);
+        printf("register:0x%08x value: 0x%08x @ %b\n", i, tmp, tmp);
+    }
+}   
+
+int dump_cam_reg (void)
+{
+//  struct dump_reg1 *reg;
+//    int i, tmp = 0;
+    
+printf("-----------------------------%s\n", __func__);
+#if 1
+    reg.in_module	= "camera module";
+    reg.base 		= 0x480bc000; 
+    reg.end 		= 0x480bc06c;
+    reg.offset 		= 4;
+#endif
+    xxxx_dump(&reg);
+}
+/*********************************************/
+
 int do_camtest ( cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
 {
     if (argc != 3) {
@@ -4032,17 +4615,38 @@ printf("-----------------enable\n");
                 sensor_reset(_MAIN_SENSOR_);
             #endif
 
-            init_sensor(OUTPUT_YUV422,_MAIN_SENSOR_);	//move here by myself;
+//            init_sensor(OUTPUT_YUV422,_MAIN_SENSOR_);	//move here by myself;
+
+/***********************************/
+dump_cam_reg();
+/***********************************/
+
             init_isp(OUTPUT_YUV422);
 printf("----------------before init_sensor\n");
-//            init_sensor(OUTPUT_YUV422,_MAIN_SENSOR_);
+            init_sensor(OUTPUT_YUV422,_MAIN_SENSOR_);
         }
+
+
+/*****************************************************************/
+printf("--------------csi2_irqstat:%x\n", __raw_readl(0x480bd818));
+
+printf("--------------csi2_ctx_ctrl1:%x\n", __raw_readl(0x480bd870));
+printf("--------------csi2_ctx_irqenable:%x\n", __raw_readl(0x480bd884));
+printf("--------------csi2_ctx_isqstatus:%x\n", __raw_readl(0x480bd888));
+/*****************************************************************/
+
+
         //enable CCDC
         ispccdc_enable();
 #if defined(USE_RESIZER)
         //enable resizer
         ispresizer_enable(1);
 #endif
+
+/*****************************/
+dump_cam_reg();
+/*****************************/
+
         handle_isp_int_poll();
     }
     return 0;
